@@ -1,15 +1,15 @@
 {
   "files": {
     "main.css": "/anime-schedule-web/static/css/main.e10575da.css",
-    "main.js": "/anime-schedule-web/static/js/main.f22a8046.js",
+    "main.js": "/anime-schedule-web/static/js/main.70bcabac.js",
     "static/js/787.8be4e0f1.chunk.js": "/anime-schedule-web/static/js/787.8be4e0f1.chunk.js",
     "index.html": "/anime-schedule-web/index.html",
     "main.e10575da.css.map": "/anime-schedule-web/static/css/main.e10575da.css.map",
-    "main.f22a8046.js.map": "/anime-schedule-web/static/js/main.f22a8046.js.map",
+    "main.70bcabac.js.map": "/anime-schedule-web/static/js/main.70bcabac.js.map",
     "787.8be4e0f1.chunk.js.map": "/anime-schedule-web/static/js/787.8be4e0f1.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.e10575da.css",
-    "static/js/main.f22a8046.js"
+    "static/js/main.70bcabac.js"
   ]
 }
