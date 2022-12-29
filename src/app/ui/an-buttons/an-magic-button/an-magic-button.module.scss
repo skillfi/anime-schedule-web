@@ -1,0 +1,29 @@
+button {
+  background-color: #FF02D0;
+  padding: 4px 30px 4px 30px;
+  border-radius: 8px;
+  border: none;
+  font-size: 0.75em;
+  color: #fff;
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 600;
+  border: 2px solid transparent;
+  -webkit-font-smoothing: antialiased;
+
+  &.bordered {
+    background-color: transparent;
+    border: 2px solid #FF02D0;
+  }
+
+  &:disabled {
+    background-color: #aaa;
+    color: grey;
+    border: 1px solid grey;
+  }
+}
+
+.selected {
+  background: transparent;
+  border: 2px solid #FF02D0;
+}

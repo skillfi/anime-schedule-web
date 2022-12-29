@@ -1,0 +1,63 @@
+/* bootstrap colors */
+$blue-light: #7fbaf9;
+$blue: #007bff;
+
+$red: #FE6763;
+$orange: #FFAE38;
+$yellow: #FEFF00;
+$green: #BEFF7D;
+$teal: #20c997;
+$indigo: #6610f2;
+$purple: #6f42c1;
+
+$green-light: #64E9B9;
+$yellow-light: #E9CE63;
+$orange-light: #FEA26E;
+$red-light: #FE6B72;
+$smooth-black: #08051F;
+
+
+$nav-background: #020D16;
+$nav-background-hover: darken($nav-background, 5%);
+$nav-background-light: #fff; // RGBA(230, 240, 246, 1.00);
+$nav-background-light-hover: #f6f6f6;
+
+$table-light: #EFF5FA; // #EDF5FA;
+
+$oxford-blue: #1D3549;
+
+$background: #08051F;
+$background-light: #eeeeee;
+
+$card: $smooth-black;
+$card-light: #ffffff;
+
+$primary: #ffffff;
+$secondary: #BEFF7D;
+$secondary-light: #69c; // #96C3E3;
+
+$link-color: $secondary;
+
+$pink: #FF02D0;
+
+/* font settings */
+$font-family-sans-serif: 'FC Sans';
+$font-weight-base: 300;
+$font-size-base: 0.9rem;
+
+/* bootstrap gaps, margins, etc */
+$grid-gutter-width: 16px;
+
+/* easing functions */
+
+$easeOutCubic: cubic-bezier(0.215, 0.61, 0.355, 1);
+$easeOutQuart: cubic-bezier(0.165, 0.84, 0.44, 1);
+$easeOutBack: cubic-bezier(0.175, 0.885, 0.32, 1.275);
+
+$modal-background-image-url: '/assets/project-modal-bg.jpg';
+
+$navbar-height: 72px;
+$sidebar-width: 260px;
+$sidebar-width-small: 210px;
+$sidebar-width-mobile: 80px;
+$sidebar-pinned-wdth: 70px;

@@ -1,0 +1,92 @@
+.profile-icon {
+    cursor:pointer;
+    color: red;
+    font-size: medium;
+    margin-right: 20px;
+}
+
+.profile-icon:hover {
+    cursor: pointer;
+    color: green;
+}
+
+.header {
+    height: auto;
+    width: auto;
+    background: #707070;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.logo {
+    font-size: large;
+    padding: 10px;
+}
+
+.menu-header-item {
+    display: flex;
+    flex-direction: row;
+    /*margin-right: 20px;*/
+}
+
+.user-profile {
+    background: white;
+    height: 87px;
+    width: 240px;
+    border-radius: 44px;
+    align-items: center;
+    align-self: flex-start;
+    display: flex;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.16);
+    /*flex-direction: row;*/
+    /*padding-right: 20px;*/
+    flex-wrap: wrap;
+
+}
+
+.caret {
+    cursor: pointer;
+    color: #282c34;
+    font-size: medium;
+    justify-content: center;
+    margin-left: 20px;
+}
+
+.menu-item{
+    min-width: 40px;
+    width: 240px;
+    box-shadow: 0px 4px 8px rgba(5, 4, 4, 0.5);
+    display: flex;
+    background: #08051F;
+    border-radius: 25%;
+    min-height: 150px;
+    max-height: 200px;
+    margin-top: 10px;
+    flex-direction: column;
+
+}
+
+.menu-item, .admin-panel, .edit-profile, .sign-out {
+    animation-name: menu-dawn;
+    -webkit-animation-name: menu-dawn;
+    animation-duration: 5ms;
+    -webkit-animation-duration: 5ms;
+}
+
+.admin-panel, .edit-profile, .sign-out{
+    /*margin-bottom: 5px;*/
+    color: #9F8DD0;
+    align-self: center;
+}
+
+@keyframes menu-dawn {
+    from {opacity: 0;transform: translateY(-200px)}
+    to {opacity: 1;transform: none}
+}
+@-webkit-keyframes menu-dawn {
+    from {opacity: 0;transform: translateY(-200px)}
+    to {opacity: 1;transform: none}
+}
+
