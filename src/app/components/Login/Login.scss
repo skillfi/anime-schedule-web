@@ -1,0 +1,257 @@
+// @import url(https://fonts.googleapis.com/css?family=Roboto:400,300);
+$primary: #00FCD1;
+$secondary: #04DFBD;
+$lighter: #b9b9b9;
+$light: #3D4256;
+$dark: #1E2137;
+$bg1: #333342;
+$bg2: #4D4E63;
+$border-radius: 12px;
+
+
+//--- ## FORM #############
+.login {
+    width: 420px;
+    background: #181c25;
+    box-shadow: 0 20px 50px rgb(0 0 0 / 10%);
+    border-radius: 12px;
+    overflow: hidden;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1;
+    background: linear-gradient(180deg, rgba(154, 146, 220, 0.16) 0%, rgba(218, 216, 234, 0.0752) 50%, rgba(55, 45, 114, 0.16) 100%);
+    border: 1px solid rgba(237, 242, 255, 0.05);
+    -webkit-backdrop-filter: blur(4px);
+    backdrop-filter: blur(4px);
+    border-radius: 8px;
+    // &:before {
+    //   content:"";
+    //   position: absolute;
+    //   background: transparent;
+    //   bottom: 45px;
+    //   right: 40px;
+    //   width: 55px;
+    //   height: 55px;
+    //   z-index: 5;
+    //   transition: all .6s ease-in-out, background 0s ease;
+    // }
+    .form {
+        display: block;
+        position: relative;
+        h2 {
+            // background: #242939;
+            display: block;
+            box-sizing: border-box;
+            width: 100%;
+            margin: 0 0 30px 0;
+            padding: 14px;
+            font-weight: 200;
+            color: #ff02d0;
+            font-size: 19px;
+            text-align: center;
+            border-bottom: 1px solid;
+            align-items: center;
+        }
+        .submit-wrap {
+            display: flex;
+            align-items: center;
+            height: 55px;
+            margin: 0 40px 30px 40px;
+        }
+        .form-field {
+            display: flex;
+            align-items: center;
+            height: 55px;
+            margin: 0 40px 30px 40px;
+            border-bottom: 1px solid $lighter;
+            label {
+                width: 10px;
+                padding: 0 15px 0 0;
+                color: $lighter;
+            }
+            input {
+                width: 100%;
+                background: transparent;
+                color: $lighter;
+                padding: 15px;
+                border: 0;
+                margin: 0;
+                &+svg {
+                    width: 35px;
+                    width: 35px;
+                    fill: none;
+                    stroke: $primary;
+                    stroke-width: 7;
+                    stroke-linecap: round;
+                    stroke-dasharray: 1000;
+                    stroke-dashoffset: -100;
+                    transition: all .3s ease-in-out;
+                }
+                &:valid + svg {
+                    stroke-dashoffset: 0;
+                }
+                &:focus {
+                    outline: none;
+                }
+            }
+            *::placeholder {
+                color: $lighter;
+            }
+        }
+        .button {
+            width: 100%;
+            position: relative;
+            cursor: pointer;
+            box-sizing: border-box;
+            padding: 0 40px 45px 40px;
+            margin: 0;
+            border: 0;
+            background: transparent;
+            outline: none;
+            .arrow-wrapper {
+                transition: all 0.45s ease-in-out;
+                position: relative;
+                margin: 0;
+                width: 100%;
+                height: 55px;
+                right: 0;
+                float: right;
+                background: linear-gradient(90deg, $secondary, $primary);
+                box-shadow: 0 3px 20px rgba($primary, 0.4);
+                border-radius: $border-radius;
+                .arrow {
+                    position: absolute;
+                    top: 50%;
+                    margin: auto;
+                    transition: all 0.45s ease-in-out;
+                    right: 35px;
+                    width: 15px;
+                    height: 2px;
+                    background: none;
+                    transform: translateY(-50%);
+                    &:before {
+                        position: absolute;
+                        content: '';
+                        top: -4px;
+                        right: 0;
+                        width: 8px;
+                        height: 8px;
+                        border-top: 2px solid #fff;
+                        border-right: 2px solid #fff;
+                        transform: rotate(45deg);
+                    }
+                }
+            }
+            .button-text {
+                transition: all 0.45s ease-in-out;
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                padding: 0;
+                margin: 0;
+                color: #fff;
+                line-height: 55px;
+                text-align: center;
+                text-transform: uppercase;
+            }
+        }
+    }
+    .finished {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        z-index: 7;
+        svg {
+            width: 100px;
+            width: 100px;
+            fill: none;
+            stroke: #fff;
+            stroke-width: 7;
+            stroke-linecap: round;
+            stroke-dasharray: 1000;
+            stroke-dashoffset: -100;
+            transition: all .3s ease-in-out .5s;
+        }
+    }
+    &.loading {
+        .form {
+            .button {
+                .arrow-wrapper {
+                    width: 55px;
+                    animation: sk-rotateplane 1.2s infinite ease-in-out .5s;
+                    .arrow {
+                        background: #fff;
+                        transform: translate(15px, 0);
+                        opacity: 0;
+                        transition: opacity 0.3s ease-in-out .5s;
+                    }
+                }
+                .button-text {
+                    color: $lighter;
+                }
+            }
+        }
+    }
+    &.active {
+        &:before {
+            bottom: 0;
+            right: 0;
+            background: linear-gradient(90deg, $secondary, $primary);
+            border-radius: $border-radius;
+            height: 100%;
+            width: 100%;
+        }
+        .form {
+            .button {
+                .arrow-wrapper {
+                    animation-iteration-count: 1;
+                }
+            }
+        }
+        .finished {
+            svg {
+                stroke-dashoffset: 0;
+            }
+        }
+    }
+}
+
+
+@-webkit-keyframes sk-rotateplane {
+    0% { transform: perspective(120px) }
+    50% { transform: perspective(120px) rotateY(180deg) }
+    100% { transform: perspective(120px) rotateY(180deg)  rotateX(180deg) }
+}
+
+
+@-webkit-keyframes autofill {
+    to {
+        color: inherit;
+        background: transparent;
+    }
+}
+/* Change autocomplete styles in WebKit */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+textarea:-webkit-autofill,
+textarea:-webkit-autofill:hover,
+textarea:-webkit-autofill:focus,
+select:-webkit-autofill,
+select:-webkit-autofill:hover,
+select:-webkit-autofill:focus {
+    // border: 1px solid green;
+    -webkit-text-fill-color: $lighter;
+    -webkit-box-shadow: 0 0 0px 1000px transparent inset;
+    transition: background-color 5000s ease-in-out 0s;
+}
+
+body{
+    background-color: $bg1;
+}
+
+// background: linear-gradient(180deg, rgb(0 0 0 / 88%), rgb(25 30 34 / 82%));
