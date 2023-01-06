@@ -61,3 +61,23 @@ $sidebar-width: 260px;
 $sidebar-width-small: 210px;
 $sidebar-width-mobile: 80px;
 $sidebar-pinned-wdth: 70px;
+
+$body-bg: radial-gradient(#a23982,#1f1013);
+
+$d: 70;      // density
+$w: 600;     // grid size
+$s: 3s;       // speed
+
+$grad: ();
+@for $i from 0 to $d {
+  $v: random(1) + 2;
+  $a: random(2) * .1 + .5;
+  $grad: $grad, radial-gradient(
+                  $v+px $v+px at
+                  (random($w - $v * 2) + $v)+px
+                  (random($w - $v * 2) + $v)+px,
+                  rgba(255,255,255,$a) 50%,
+                  rgba(0,0,0,0)
+  ) !global;
+}
+

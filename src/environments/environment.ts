@@ -1,11 +1,17 @@
 /// <reference types="react-scripts" />
 
-const backendURL = getURL()
-// const host = location.protocol + '//' + location.host
+const backendURL = getURL(false)
+const host = document.location.protocol + '//' + document.location.host
 
 
-function getURL(){
-    return 'http://localhost:8080';
+function getURL(local: boolean){
+    if (local){
+        return 'http://localhost:8080';
+    }
+    else {
+        return 'https://anime-schedule.azurewebsites.net'
+    }
+
 }
 
 export const environment = {
@@ -16,7 +22,7 @@ export const environment = {
 }
 
 export const settings = {
-    title: 'T Anime |',
+    title: 'T Anime | ',
     config: {
         headers: {
             'content-type': 'multipart/form-data'

@@ -10,8 +10,6 @@ function App() {
 
       return (
         <div className="spinner-overlay">
-            {/*<div className={"lds-hourglass"}>*/}
-            {/*</div>*/}
             <Main/>
         </div>
       );

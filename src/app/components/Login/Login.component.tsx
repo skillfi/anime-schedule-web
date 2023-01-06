@@ -1,5 +1,5 @@
 import * as React from "react";
-import InputFieldComponent from "./InputField.component";
+import InputFields from "./InputField.component";
 import './Login.scss'
 import {settings} from "../../../environments/environment";
 
@@ -17,7 +17,7 @@ export default class LoginComponent extends React.Component<LProps, {}>{
 
         return (
             <div className={"login"}>
-                <InputFieldComponent />
+                <InputFields />
             </div>
         )
     }

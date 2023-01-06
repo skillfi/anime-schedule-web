@@ -39,30 +39,41 @@ const remove_anime = (event: React.MouseEvent<HTMLButtonElement>, anime_id: numb
     })
 }
 
-export interface Anime{
-    id: number;
-    country?: string;
-    name?: string;
-    quality?: number;
-    rating?: number;
-    release_date: string;
-    time?: string;
-    url?: string;
-    genres?: Genre[];
-    producers?: Producer[];
-    updates?: Update[];
-    icon?: JSX.Element;
-    date?: string;
-    loading?: boolean;
+interface ObjectId{
+    '$oid': string
+}
 
+interface Episode{
+    _id: ObjectId;
+    air_date: string;
+    duration: number;
+    episode_id: number;
+    full_title: string;
+    title: string
+}
+
+export interface Anime{
+    _id: ObjectId;
+    name: string;
+    rating: number;
+    episodes: number;
+    release_date: string;
+    country: string;
+    genres: string[];
+    subscribe: boolean;
+    inList: string;
+    quality: number;
+    image: string;
+    episodes_list: Episode[];
+    time: number
 }
 
 export interface AnimeResponse{
     data: Anime[];
-    readonly rows?: AnimeTable[];
-    page?: number;
-    rowPerPage?: number;
-    open: boolean;
+}
+
+export interface AnimeIdResponse{
+    data: Anime;
 }
 
 export interface AnimeTable{
@@ -71,12 +82,19 @@ export interface AnimeTable{
     release_date?: string;
 }
 
-const getAll = () => {
-    return http.get<AnimeResponse>('/anime')
+async function getAll(): Promise<Anime[]> {
+    let data: Anime[] = [];
+    try {
+        const response = await http.get<AnimeResponse>('/anime')
+        data = response.data.data
+    }catch (e) {
+        alert(e)
+    }
+    return data
 }
 
 const getById = (id: number) => {
-    return http.get('/anime'+id);
+    return http.get<AnimeIdResponse>('/anime'+id);
 }
 
 const create = (data: FormData) => {
@@ -87,12 +105,23 @@ const update = (id: number, data: FormData) => {
     return http.put('/anime'+id, data);
 }
 
-const remove = (id: number) => {
+const remove = (id: number | undefined) => {
     return http.delete('/anime/'+id);
 }
 
 const generateAnime = (data: FormData) => {
     return http.post('/generate', data)
+}
+
+async function getImage(url: string){
+    let data = new Image();
+    try {
+        const response = await http.get(url)
+        data = response.data
+    }catch (e) {
+        console.log(e)
+    }
+    return data
 }
 
  const AnimeService = {
@@ -101,7 +130,8 @@ const generateAnime = (data: FormData) => {
      create,
      generateAnime,
      remove,
-     update
+     update,
+     getImage
 }
 
 export default AnimeService

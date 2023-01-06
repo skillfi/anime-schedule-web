@@ -1,53 +1,83 @@
 import * as React from "react";
-import {At, Key, Atom} from 'phosphor-react'
-import AnMagicButtonComponent from "../../ui/an-buttons/an-magic-button/AnMagicButton.component";
+import {At, Key} from 'phosphor-react'
+import {Box, TextField, Button} from '@mui/material';
 import LogoComponent from "../Logo/logo.component";
+import LoginService from "../../sevices/login.service";
+import {useNavigate} from "react-router-dom";
+import {useState} from "react";
+import {ILogin} from "../../types/types";
+import sessionService from "../../sevices/session.service";
+import loginService from "../../sevices/login.service";
 
 interface IProps {
     submit?: any;
 }
 
-export default class InputFieldComponent extends React.Component<IProps, any>{
-    private Form: React.RefObject<HTMLInputElement>;
+interface IState{
+    email: string;
+    password: string;
+}
 
-    public formData = new FormData()
-    constructor(props: IProps) {
-        super(props);
-        this.Form = React.createRef();
-        this.state = {user: ''}
-        this.onChange = this.onChange.bind(this)
+const InputFields: React.FC<IProps> = ({submit}) => {
+    let navigate = useNavigate();
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const formData = new FormData()
+
+    function submitForm(event: React.MouseEvent<HTMLButtonElement>){
+
+        // Preventing the page from reloading
+        event.preventDefault();
+        formData.append('email', email)
+        formData.append('password', password)
+        console.log(formData)
+
+        // Do something
+        try {
+            loginService.logIn(formData).then((value)=>{
+                sessionService.setCurrentUser(value?.data.user)
+                sessionService.setToken(value?.data.auth_token)
+            })
+            navigate('/menu')
+        } catch (e){
+            alert(e)
+        }
     }
 
-    onChange = (e: React.FormEvent<HTMLInputElement>): void => {
+    function onChange(e: React.ChangeEvent<HTMLInputElement>) {
+
         e.preventDefault()
-        // console.log(e.currentTarget.name)
-        this.formData.append(e.currentTarget.name, e.currentTarget.value)
+        switch (e.currentTarget.name){
+            case 'email': {
+                setEmail(e.currentTarget.value)
+                break;
+            }
+            case 'password': {
+                setPassword( e.currentTarget.value)
+                break;
+            }
+        }
+        console.log(e.currentTarget.name)
+
     };
 
-    render() {
-        return (
-            <form className={"form"} noValidate={true} autoComplete={'off'}>
-                <LogoComponent/>
-                <div className={'form-field'}>
-                    <label htmlFor={"login-mail"}>
-                        <At/>
-                    </label>
-                    <input id={"login-mail"} placeholder={"E-Mail"} type={'text'}
-                           pattern={'[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$'} required={true}
-                            name={'email'} onChange={this.onChange}/>
-                </div>
-                <div className={'form-field'}>
-                    <label htmlFor={"login-password"}>
-                        <Key/>
-                    </label>
-                    <input id={'login-password'} type={"password"} placeholder={"Password"}
-                    pattern={".{4,}"} required={true} name={'password'} onChange={this.onChange}/>
-                </div>
-                <div className={'submit-wrap'}>
-                    <AnMagicButtonComponent text={'Sign In'} style={{width: '100%', cursor: "pointer"}}
-                    formData={this.formData}/>
-                </div>
-            </form>
-        )
-    }
+    return (
+        <Box sx={{ '& > :not(style)': { m: 2 }, alignItems: 'center'}}>
+            <LogoComponent/>
+            <Box sx={{ display: 'flex', alignItems: 'center', alignContent: 'center'}}>
+                <At size={40}/>
+                <TextField id="input-with-sx" label="E-Mail" variant="standard" name={'email'}
+                           onChange={onChange} inputProps={{pattern: '[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$'}}/>
+            </Box>
+            <Box sx={{ display: 'flex', alignItems: 'center', alignContent: 'center'}}>
+                <Key size={40}/>
+                <TextField id="input-with-sx" label="Password" type={'password'} variant="standard" name={'password'}
+                           onChange={onChange} inputProps={{pattern: '.{4,}'}}/>
+            </Box>
+            <Button variant="outlined" onClick={submitForm}>Log In</Button>
+        </Box>
+    )
+
 }
+
+export default InputFields;

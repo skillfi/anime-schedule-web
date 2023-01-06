@@ -2,7 +2,6 @@ import * as React from "react";
 import './table-form.component.scss'
 import {DataGrid, GridColDef} from "@mui/x-data-grid";
 import {Anime} from "../../../sevices/anime.services";
-import { DataGridPro } from '@mui/x-data-grid-pro';
 
 
 export interface TableProps{
@@ -15,9 +14,6 @@ export default class TableFormComponent extends React.Component<TableProps, any>
         super(props);
     }
 
-    generateGridColDef(){
-
-    }
     render() {
         return (
             <div className={'table'}>
@@ -27,7 +23,8 @@ export default class TableFormComponent extends React.Component<TableProps, any>
                     pageSize={5}
                     rowsPerPageOptions={[this.props.columns.length]}
                     checkboxSelection
-                    style={{fontFamily: 'Consolas', fontStyle: 'italic', fontSize: 'large', alignContent: 'center'}}
+                    style={{fontFamily: 'Consolas',  fontSize: 'large', alignContent: 'center', fontWeight: "bold",
+                    width: '100%', color: 'white'}}
                 />
             </div>
         );

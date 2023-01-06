@@ -3,64 +3,95 @@ import './Menu.css'
 import TableFormComponent from "../../ui/table/table-form/table-form.component";
 import AnimeServices, {Anime} from "../../sevices/anime.services";
 import {GridColDef} from "@mui/x-data-grid";
-import { useDemoData, GridColDefGenerator } from '@mui/x-data-grid-generator'
+import VerticalTabs, {VerticalTab, VerticalTabsProps} from "../../ui/tab-panel/vertical-tabs/vertical-tabs.component";
+import FormatShapesSharpIcon from '@mui/icons-material/FormatShapesSharp';
+import sessionService from "../../sevices/session.service";
+import EqualizerIcon from '@mui/icons-material/Equalizer';
+import {Rating} from "@mui/material";
+import AnimeListComponent from "../AnimeList/animeList.component";
 
-export interface MenuStates{
-    rows: any[];
+export interface MenuStates {
+    rows: Anime[];
     fields: GridColDef[];
 }
-export default class MenuBodyComponent extends React.Component<any, MenuStates>{
+
+interface A {
+    id?: number;
+    country?: string;
+    name?: string;
+    quality?: string;
+    rating?: number | JSX.Element;
+    release_date?: string;
+    time?: string;
+    url?: string;
+    actions?: string
+    image?: string
+    episodes?: number;
+
+    getRating?(rating: string): JSX.Element;
+}
+
+export interface AnimeArray {
+    [index: number]: A
+}
+
+export default class MenuBodyComponent extends React.Component<any, MenuStates> {
+
+    animeA: A = {id: 0, country: '', name: '', quality: '', release_date: '', rating: 0, time: '', actions: ''}
+    animeU: A = {id: 0, image: '', name: '', quality: '',episodes:0, release_date: '', rating: 0, time: ''}
 
     constructor(props: any, private anime: Anime) {
         super(props);
-        this.generateRow = this.generateRow.bind(this)
         this.getAnime = this.getAnime.bind(this)
         this.state = {rows: [], fields: []}
-    }
-
-
-    generateRow(){
-        const  anime_list = this.getAnime()
-        const rows: any[] = []
-        const fields: GridColDef[] = []
-        anime_list.map((anime)=> {
-            rows.push({
-                id: anime.id,
-                name: anime.name,
-                release_date: anime.release_date
-            })
-        })
-        fields.push(
-            {field: 'id', headerName: 'Id', width: 60},
-            {field: 'name', headerName: 'Name', width: 200},
-            {field: 'release_date', headerName: 'Release Date', width: 140}
-        )
-        this.setState({fields: fields, rows: rows})
-
+        this.generateTabs = this.generateTabs.bind(this)
     }
 
     componentDidMount() {
-        this.generateRow()
+        this.getAnime()
     }
 
-    // componentDidUpdate(prevProps: Readonly<any>, prevState: Readonly<MenuStates>, snapshot?: any) {
-    //     if (this.state !== prevState){
-    //         this.generateRow()
-    //     }
-    // }
-
-    getAnime(): Anime[]{
-         AnimeServices.getAll().then((response)=> {
-                this.setState({rows:response.data.data})
+    getAnime(): Anime[] {
+        AnimeServices.getAll().then((response) => {
+                this.setState({rows: response})
             }
         )
         return this.state.rows
     }
 
+
+    generateTabs() {
+        let tab: VerticalTab[] = []
+        let vtab: VerticalTabsProps[] = []
+        if (sessionService.isAdmin()) {
+            vtab.push(
+                {
+                    label: 'Anime List',
+                    component: <AnimeListComponent rows={this.state.rows} obj={this.animeU}/>,
+                    icon: <FormatShapesSharpIcon/>
+                },
+                {
+                    label: 'Manage Anime',
+                    component: <AnimeListComponent rows={this.state.rows} obj={this.animeA}/>,
+                    icon: <EqualizerIcon/>
+                }
+            )
+        } else {
+            vtab.push({
+                label: 'Anime List',
+                component: <AnimeListComponent rows={this.state.rows} obj={this.animeU}/>,
+                icon: <FormatShapesSharpIcon/>
+            })
+        }
+        tab.push({tabs: vtab})
+        return vtab
+    }
+
     render() {
         return (
-            <div>
-                <TableFormComponent columns={this.state.fields} rows={this.state.rows}/>
+            <div style={{width: '100%'}}>
+                <VerticalTabs tabs={this.generateTabs()} key={1}/>
+                {/*<TableFormComponent columns={this.state.fields} rows={this.state.rows}/>*/}
             </div>
         );
     }

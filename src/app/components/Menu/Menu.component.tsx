@@ -32,8 +32,9 @@ export default class MenuComponent extends React.Component<User, any>{
     }
     render() {
         return (
-            <div style={this.menuStyle} >
-                <NavbarComponent user={SessionService.getCurrentUser()}/>
+            <div style={this.menuStyle}>
+                <div className={'snow'}></div>
+                <NavbarComponent/>
                 <MenuBodyComponent/>
             </div>);
     }

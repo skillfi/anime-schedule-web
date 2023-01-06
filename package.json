@@ -1,12 +1,14 @@
 {
-  "name": "anime-schedule-web",
+  "name": "anische",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://skillfi.github.io/anime-schedule-web",
+  "homepage": "https://skillfi.github.io/anische",
+  "proxy": "http://localhost:3000",
   "dependencies": {
     "@emotion/react": "^11.10.5",
     "@emotion/styled": "^11.10.5",
     "@mui/icons-material": "^5.11.0",
+    "@mui/joy": "^5.0.0-alpha.60",
     "@mui/lab": "^5.0.0-alpha.114",
     "@mui/material": "^5.11.2",
     "@mui/x-data-grid": "^5.17.17",
@@ -23,9 +25,11 @@
     "@types/react-dom": "^18.0.9",
     "axios": "^1.2.1",
     "bootstrap": "^5.2.3",
+    "cors": "^2.8.5",
     "css-loader": "^6.7.3",
     "dayjs": "^1.11.7",
     "moment": "^2.29.4",
+    "nestjs": "^0.0.1",
     "phosphor-react": "^1.4.1",
     "react": "^18.0.0",
     "react-dom": "^18.2.0",
@@ -38,14 +42,17 @@
     "ts-loader": "^9.4.2",
     "typescript": "^4.9.4",
     "web-vitals": "^2.1.4",
-    "yarn": "^1.22.19"
+    "yarn": "^1.22.19",
+    "@nestjs/common": "^9.0.0",
+    "@nestjs/core": "^9.0.0",
+    "@nestjs/platform-express": "^9.0.0"
   },
   "scripts": {
     "start": "react-scripts start",
     "predeploy": "npm run build",
     "deploy": "gh-pages -d build",
     "build-yarn": "yarn --cwd build",
-    "build": "yarn --cwd build",
+    "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
@@ -69,6 +76,7 @@
     ]
   },
   "devDependencies": {
+    "@types/cors": "^2.8.13",
     "gh-pages": "^4.0.0"
   }
 }
