@@ -10,15 +10,15 @@ function getCurrentUser() {
     return user ? JSON.parse(user) : {};
 }
 
-function isAdmin(): boolean | undefined {
-    return getCurrentUser()?.is_admin
+function isAdmin() {
+    return getCurrentUser().is_admin
 }
 
 function setToken(token: any) {
     sessionStorage.setItem('token', JSON.stringify(token))
 }
 
-function getToken(): string {
+function getToken(){
     const item = sessionStorage.getItem('token');
     return item ? JSON.parse(item) : false;
 }

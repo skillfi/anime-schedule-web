@@ -5,12 +5,17 @@ import HdIcon from "@mui/icons-material/Hd";
 import HdrOnIcon from "@mui/icons-material/HdrOn";
 import {StyledChip} from "../styles/styles";
 
-
+/** Anime Status Quality
+ * @property {string, 'Low', 'Normal', 'HD', 'HDR'} status - `Anime Quality`
+ */
 interface StatusProps {
     status: string;
 }
 
-export const Status = React.memo((props: StatusProps) => {
+/** Status Component
+ *
+ */
+const StatusComponent = React.memo((props: StatusProps) => {
     const {status} = props;
 
     let icon: any = null;
@@ -33,3 +38,5 @@ export const Status = React.memo((props: StatusProps) => {
         <StyledChip className={status} icon={icon} size="small" label={label} variant="outlined"/>
     );
 });
+
+export default StatusComponent;

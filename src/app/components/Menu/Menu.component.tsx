@@ -1,19 +1,16 @@
 import * as React from "react";
-import './Menu.css'
 import {CSSProperties} from "react";
+import './Menu.css'
 
 import NavbarComponent from "../../ui/navbar/navbar.component";
-import MenuBodyComponent from "./MenuBody.component";
+import MenuBodyComponent from "./Menu-Body.component";
 import {settings} from "../../../environments/environment";
 import {User} from "../../models/form-data.model";
-import SessionService from "../../sevices/session.service";
-
 
 
 export default class MenuComponent extends React.Component<User, any>{
 
-    constructor(props: any,
-                private sessionService: typeof SessionService) {
+    constructor(props: any) {
         super(props);
 
     }
@@ -26,14 +23,9 @@ export default class MenuComponent extends React.Component<User, any>{
         document.title = settings.title + " Menu"
     }
 
-
-    public menuStyle: CSSProperties = {
-        height: 'auto'
-    }
     render() {
         return (
-            <div style={this.menuStyle}>
-                <div className={'snow'}></div>
+            <div>
                 <NavbarComponent/>
                 <MenuBodyComponent/>
             </div>);

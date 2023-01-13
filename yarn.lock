@@ -3157,6 +3157,11 @@
   "resolved" "https://registry.npmjs.org/axe-core/-/axe-core-4.6.1.tgz"
   "version" "4.6.1"
 
+"axios-observable@^2.0.0":
+  "integrity" "sha512-CINOLfMLwAyf2km/nRBybF9OyWXOfRA5ftoYn2Q+Rb2w4KB/FIylk68y7rgI/na6Jen5/I8R9bt6VtDdF/zoyA=="
+  "resolved" "https://registry.npmjs.org/axios-observable/-/axios-observable-2.0.0.tgz"
+  "version" "2.0.0"
+
 "axios@^0.19.2":
   "integrity" "sha512-fjgm5MvRHLhx+osE2xoekY70AhARk3a6hkN+3Io1jc00jtquGvxYlKlsFUhmUET0V5te6CcZI7lcv2Ym61mjHA=="
   "resolved" "https://registry.npmjs.org/axios/-/axios-0.19.2.tgz"
@@ -3164,7 +3169,7 @@
   dependencies:
     "follow-redirects" "1.5.10"
 
-"axios@^1.2.1":
+"axios@^1.0.0", "axios@^1.2.1":
   "integrity" "sha512-I88cFiGu9ryt/tfVEi4kX2SITsvDddTajXTOFmt2uK1ZVA8LytjtdeyefdQWEf5PU8w+4SSJDoYnggflB5tW4A=="
   "resolved" "https://registry.npmjs.org/axios/-/axios-1.2.1.tgz"
   "version" "1.2.1"
@@ -8890,7 +8895,7 @@
   dependencies:
     "queue-microtask" "^1.2.2"
 
-"rxjs@^7.1.0", "rxjs@^7.8.0":
+"rxjs@^7.0.0", "rxjs@^7.1.0", "rxjs@^7.8.0":
   "integrity" "sha512-F2+gxDshqmIub1KdvZkaEfGDwLNpPvk9Fs6LD/MyQxNgMds/WH9OdDDXOmxUZpME+iSK3rQCctkL0DYyytUqMg=="
   "resolved" "https://registry.npmjs.org/rxjs/-/rxjs-7.8.0.tgz"
   "version" "7.8.0"

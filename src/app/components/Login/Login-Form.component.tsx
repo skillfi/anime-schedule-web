@@ -1,47 +1,50 @@
 import * as React from "react";
-import {At, Key} from 'phosphor-react'
-import {Box, TextField, Button} from '@mui/material';
-import LogoComponent from "../Logo/logo.component";
-import LoginService from "../../sevices/login.service";
-import {useNavigate} from "react-router-dom";
 import {useState} from "react";
-import {ILogin} from "../../types/types";
-import sessionService from "../../sevices/session.service";
+import {At, Key} from 'phosphor-react'
+import {Box, Button, TextField} from '@mui/material';
 import loginService from "../../sevices/login.service";
+import {useNavigate} from "react-router-dom";
+import sessionService from "../../sevices/session.service";
+import {Simulate} from "react-dom/test-utils";
 
 interface IProps {
     submit?: any;
 }
 
-interface IState{
+interface IState {
     email: string;
     password: string;
 }
 
-const InputFields: React.FC<IProps> = ({submit}) => {
+const LoginFormComponent: React.FC<IProps> = ({submit}) => {
     let navigate = useNavigate();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const formData = new FormData()
 
-    function submitForm(event: React.MouseEvent<HTMLButtonElement>){
+    /**
+     * Функція відправлення вхідних даних на сервер
+     * @api: /api/login
+     * @param event React.MouseEvent<HTMLButtonElement>
+     */
+    function submitForm(event: React.MouseEvent<HTMLButtonElement>) {
 
         // Preventing the page from reloading
         event.preventDefault();
         formData.append('email', email)
         formData.append('password', password)
-        console.log(formData)
+        console.log(formData.values())
 
         // Do something
-        try {
-            loginService.logIn(formData).then((value)=>{
-                sessionService.setCurrentUser(value?.data.user)
-                sessionService.setToken(value?.data.auth_token)
-            })
+        loginService.logIn(formData).subscribe((response) => {
+            console.log(response)
+            sessionService.setCurrentUser(response.data.data.user)
+            sessionService.setToken(response.data.data.auth_token)
+        }, (error) => {
+            alert(error)
+        }, () => {
             navigate('/menu')
-        } catch (e){
-            alert(e)
-        }
+        })
     }
 
     function onChange(e: React.ChangeEvent<HTMLInputElement>) {
@@ -63,7 +66,6 @@ const InputFields: React.FC<IProps> = ({submit}) => {
 
     return (
         <Box sx={{ '& > :not(style)': { m: 2 }, alignItems: 'center'}}>
-            <LogoComponent/>
             <Box sx={{ display: 'flex', alignItems: 'center', alignContent: 'center'}}>
                 <At size={40}/>
                 <TextField id="input-with-sx" label="E-Mail" variant="standard" name={'email'}
@@ -80,4 +82,4 @@ const InputFields: React.FC<IProps> = ({submit}) => {
 
 }
 
-export default InputFields;
+export default LoginFormComponent;

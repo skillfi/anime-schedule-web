@@ -1,80 +1,24 @@
 import http from "../../http-common";
-import moment from "moment";
-import {DotsThreeOutlineVertical} from "phosphor-react";
-import {Dayjs} from "dayjs";
 import * as React from "react";
+import {AnimeIdResponse, AnimeResponse, IAnime, UserAnimeProps} from "../types/types";
+import {environment} from "../../environments/environment";
+import {from, of} from "rxjs";
 
-export interface Genre{
-    name?: string;
-    id?: number;
-}
-
-export interface Update{
-    added_at?: Date;
-    anime_id?: number;
-    episode?: number;
-    id?: number;
-    on_tv?: boolean;
-    season?: number;
-}
-
-export interface Producer{
-    name?: string;
-    surname?: string;
-}
-
-const remove_anime = (event: React.MouseEvent<HTMLButtonElement>, anime_id: number) => {
+function remove_anime(event: React.MouseEvent<HTMLButtonElement>, anime_id: number) {
     // Preventing the page from reloading
     event.preventDefault();
     // console.log(this.props.formData)
 
     // Do something
-    AnimeService.remove(anime_id).then((res)=>{
+    AnimeService.remove(anime_id).subscribe((response) => {
         // console.log(res.data.data)
         // SessionService.setCurrentUser(res.data.data?.user)
         // SessionService.setToken(res.data.data?.user)
         // return document.location.replace('/menu')
-    }).catch((e: Error)=> {
-        console.log(e)
     })
 }
 
-interface ObjectId{
-    '$oid': string
-}
 
-interface Episode{
-    _id: ObjectId;
-    air_date: string;
-    duration: number;
-    episode_id: number;
-    full_title: string;
-    title: string
-}
-
-export interface Anime{
-    _id: ObjectId;
-    name: string;
-    rating: number;
-    episodes: number;
-    release_date: string;
-    country: string;
-    genres: string[];
-    subscribe: boolean;
-    inList: string;
-    quality: number;
-    image: string;
-    episodes_list: Episode[];
-    time: number
-}
-
-export interface AnimeResponse{
-    data: Anime[];
-}
-
-export interface AnimeIdResponse{
-    data: Anime;
-}
 
 export interface AnimeTable{
     id?: number;
@@ -82,46 +26,52 @@ export interface AnimeTable{
     release_date?: string;
 }
 
-async function getAll(): Promise<Anime[]> {
-    let data: Anime[] = [];
-    try {
-        const response = await http.get<AnimeResponse>('/anime')
-        data = response.data.data
-    }catch (e) {
-        alert(e)
-    }
-    return data
+function getAll() {
+    return from(http.get<AnimeResponse>(environment.apiUrl + '/anime'))
 }
 
-const getById = (id: number) => {
-    return http.get<AnimeIdResponse>('/anime'+id);
+function getById(id: string) {
+    return from(http.get<AnimeIdResponse>(environment.apiUrl + '/anime/' + id));
 }
 
-const create = (data: FormData) => {
-    return http.post('/anime', data);
+async function getByIdAsync(id: string) {
+    return await http.get<AnimeIdResponse>(environment.apiUrl + '/anime/' + id);
 }
 
-const update = (id: number, data: FormData) => {
-    return http.put('/anime'+id, data);
+function create(data: FormData) {
+    return http.post(environment.apiUrl + '/anime', data);
 }
 
-const remove = (id: number | undefined) => {
-    return http.delete('/anime/'+id);
+function update(id: number, data: FormData) {
+    const promise =  http.put('/anime' + id, data);
+    return from(promise)
 }
 
-const generateAnime = (data: FormData) => {
-    return http.post('/generate', data)
+function remove(id: number | undefined) {
+    return from(http.delete(environment.apiUrl + '/anime/' + id));
 }
 
-async function getImage(url: string){
-    let data = new Image();
-    try {
-        const response = await http.get(url)
-        data = response.data
-    }catch (e) {
-        console.log(e)
-    }
-    return data
+function generateAnime(data: FormData) {
+    return from(http.post<IAnime>(environment.apiUrl + '/anime/generate', data));
+}
+
+function subscribe(data: FormData){
+    return from(http.post(environment.apiUrl + '/subscribes', data));
+}
+
+function getSubscribe(row: IAnime[]){
+    let userProps: UserAnimeProps[] = [];
+    row.map((anime)=>{
+        from(http.get<{data: boolean}>(environment.apiUrl + `/subscribe/anime/${anime.id}/me`))
+            .subscribe((response)=>{
+                userProps.push({subscription: response.data.data})
+            }, ((e)=>alert(e)))
+    })
+    return userProps
+}
+
+function unsubscribe(anime_id: string){
+    return from(http.delete(environment.apiUrl + `/subscribe/anime/${anime_id}/me`))
 }
 
  const AnimeService = {
@@ -131,7 +81,10 @@ async function getImage(url: string){
      generateAnime,
      remove,
      update,
-     getImage
+     subscribe,
+     getSubscribe,
+     unsubscribe,
+     getByIdAsync
 }
 
 export default AnimeService
