@@ -174,14 +174,40 @@ export interface UAnime{
 
 
 /** User List Interface
- * @property {Array<IAnime>} anime_list - `Anime List`
+ * @property {string} anime_id - `Anime Id`
+ * @property {string} bookmark_id - `Bookmark Id`
  * @property {string} id - `List Id`
- * @property {string} name - `List Name`
  */
 export interface IUserList{
-    anime_list: string[];
-    name: string;
+    anime_id: string;
+    bookmark_id: string;
     id: string;
+}
+
+/** User Bookmark Model
+ * @property {string} bookmark_name - `Name`
+ * @property {string} user_id - `Owner Id`
+ * @property {string} id - `Row Id`
+ */
+export interface UserBookmark{
+    bookmark_name: string;
+    user_id: string;
+    id: string;
+}
+
+/** User Bookmark Model
+ * @property {Array<IUserList>} anime_list - `list with anime`
+ */
+export interface UsersBookmark extends UserBookmark{
+    anime_list: IUserList[]
+}
+
+export interface UsersBookmarkResponse{
+    data: UsersBookmark[]
+}
+
+export interface UserBookmarks{
+    data: UserBookmark[]
 }
 
 /** User List Response

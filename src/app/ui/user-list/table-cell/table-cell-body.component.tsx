@@ -1,5 +1,5 @@
 import * as React from "react";
-import {Avatar, Rating, TableCell, tableCellClasses} from "@mui/material";
+import {Avatar, Checkbox, Rating, TableCell, tableCellClasses} from "@mui/material";
 import {IAnime} from "../../../types/types";
 import StatusComponent from "../../status/status.component";
 import IncotermComponent from "../../incoterm/incoterm.component";
@@ -8,6 +8,8 @@ import {useEffect, useState} from "react";
 import animeServices from "../../../sevices/anime.services";
 import UserListService from "../../../sevices/user_list.services";
 import {styled} from "@mui/material/styles";
+import SubscribeComponent from "../../subscribe/subscribe.component";
+import MultipleSelectChip from "../../multiple-select-chip/multiple-select-chip.component";
 
 /** Table Cell Props
  * @property {string} id - `Anime Id To Render`
@@ -23,9 +25,10 @@ interface TableCellProps<T>{
     align: "left" | "center" | "right" | "justify" | "inherit" | undefined;
     list_name: string;
     cells: T[];
+    all_lists: string[];
 }
 
-function render(object: any, name: string){
+function render(object: any, name: string, lists: string[]){
     switch (name) {
         case 'quality': {
             switch (object[name]) {
@@ -59,11 +62,16 @@ function render(object: any, name: string){
             break;
         }
         case 'subscribe': {
-            break;
+            return <SubscribeComponent value={object[name]} row_id={object['id']}/>;
         }
         case 'id': {
             break;
         }
+        case 'admin':{
+            break;
+        }
+        case 'bookmarks':
+            return <MultipleSelectChip bookmarks={lists} row_id={object['id']}></MultipleSelectChip>
         default: {
             // @ts-ignore
             return object[name]
@@ -101,7 +109,7 @@ export default function TableCellBodyComponent<T>(props: TableCellProps<T>) {
 
     return (
         <StyledTableCell align={props.align}>
-            {render(props.cell, props.cellName)}
+            {render(props.cell, props.cellName, props.all_lists)}
         </StyledTableCell>
     )
 }

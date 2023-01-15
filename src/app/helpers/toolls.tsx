@@ -64,14 +64,6 @@ const RenderSubscribe = (props: GridRenderCellParams<boolean>) => {
         })
     }
 
-    // React.useLayoutEffect(() => {
-    //     if (row.subscribe) {
-    //         const input = buttonElement.current?.value
-    //         setSub(row.subscribe)
-    //         // input?.focus();
-    //     }
-    // }, [sub]);
-
     useEffect(() => {
         animeServices.getById(row.anime_id).subscribe((response) => {
             setSub(response.data.data.subscribe)

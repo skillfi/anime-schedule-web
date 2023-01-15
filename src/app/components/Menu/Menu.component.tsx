@@ -1,18 +1,24 @@
 import * as React from "react";
-import {CSSProperties} from "react";
 import './Menu.css'
 
 import NavbarComponent from "../../ui/navbar/navbar.component";
-import MenuBodyComponent from "./Menu-Body.component";
+import MenuBodyComponent, {BookmarkRow} from "./Menu-Body.component";
 import {settings} from "../../../environments/environment";
 import {User} from "../../models/form-data.model";
+import {IAnime} from "../../types/types";
 
+interface MenuState {
+    anime: IAnime[];
+    bookmarks: BookmarkRow[]
+}
 
-export default class MenuComponent extends React.Component<User, any>{
+export default class MenuComponent extends React.Component<User, MenuState> {
+
+    book = new Array<BookmarkRow>();
 
     constructor(props: any) {
         super(props);
-
+        this.state = {anime: [], bookmarks: []}
     }
 
     componentDidMount() {
@@ -23,11 +29,12 @@ export default class MenuComponent extends React.Component<User, any>{
         document.title = settings.title + " Menu"
     }
 
+
     render() {
         return (
-            <div>
+            <React.Fragment>
                 <NavbarComponent/>
                 <MenuBodyComponent/>
-            </div>);
+            </React.Fragment>);
     }
 }

@@ -1,13 +1,13 @@
 import * as React from "react";
 import {useState} from "react";
 import {At, Key} from 'phosphor-react'
-import {Box, Button, TextField} from '@mui/material';
+import {Box, BoxProps, Button, TextField} from '@mui/material';
 import loginService from "../../sevices/login.service";
 import {useNavigate} from "react-router-dom";
 import sessionService from "../../sevices/session.service";
 import {Simulate} from "react-dom/test-utils";
 
-interface IProps {
+interface IProps extends BoxProps{
     submit?: any;
 }
 
