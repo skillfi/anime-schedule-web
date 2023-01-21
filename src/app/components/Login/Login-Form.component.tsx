@@ -6,6 +6,9 @@ import loginService from "../../sevices/login.service";
 import {useNavigate} from "react-router-dom";
 import sessionService from "../../sevices/session.service";
 import {Simulate} from "react-dom/test-utils";
+import AnimeServices from "../../sevices/anime.services";
+import {finalize} from "rxjs";
+import {BookmarkRow} from "../Menu/Menu-Body.component";
 
 interface IProps extends BoxProps{
     submit?: any;
@@ -21,6 +24,8 @@ const LoginFormComponent: React.FC<IProps> = ({submit}) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const formData = new FormData()
+    let book = new Array<BookmarkRow>();
+    const [BookMarks, setBookmark] = useState<Array<BookmarkRow>>(book);
 
     /**
      * Функція відправлення вхідних даних на сервер
@@ -33,17 +38,23 @@ const LoginFormComponent: React.FC<IProps> = ({submit}) => {
         event.preventDefault();
         formData.append('email', email)
         formData.append('password', password)
-        console.log(formData.values())
+        // console.log(formData.values())
 
         // Do something
         loginService.logIn(formData).subscribe((response) => {
-            console.log(response)
+            // console.log(response)
             sessionService.setCurrentUser(response.data.data.user)
             sessionService.setToken(response.data.data.auth_token)
         }, (error) => {
             alert(error)
         }, () => {
             navigate('/menu')
+            return AnimeServices.getAll()
+                .pipe(finalize(()=> setBookmark(book)))
+                .subscribe((response) => {
+                    // @ts-ignore
+                    book['All'] = response.data.data
+                }, ((e) => alert(e)), (() => setBookmark(book)))
         })
     }
 
@@ -60,7 +71,7 @@ const LoginFormComponent: React.FC<IProps> = ({submit}) => {
                 break;
             }
         }
-        console.log(e.currentTarget.name)
+        // console.log(e.currentTarget.name)
 
     };
 

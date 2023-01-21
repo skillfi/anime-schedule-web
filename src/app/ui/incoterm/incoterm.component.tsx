@@ -12,14 +12,14 @@ const IncotermComponent = React.memo(function Incoterm(props: IncotermProps) {
     }
 
     const valueStr = value.toString();
-    const tooltip = valueStr.slice(valueStr.indexOf('(') + 1, valueStr.indexOf(')'));
-    const code = valueStr.slice(1, valueStr.indexOf('(')).trim();
+    const tooltip = valueStr.slice(valueStr.indexOf('(') +1, valueStr.indexOf(')'));
+    const code = valueStr.slice(0, valueStr.indexOf('(')).trim();
 
     return (
-        <Box sx={{display: 'flex', alignItems: 'center', justifyContent: 'space-between'}}>
+        <Box sx={{display: 'flex', alignItems: 'center'}}>
             <span>{code}</span>
             <Tooltip title={tooltip}>
-                <InfoIcon sx={{color: '#2196f3', alignSelf: 'center', ml: '8px'}}/>
+                <InfoIcon sx={{color: '#2196f3', alignSelf: 'center'}}/>
             </Tooltip>
         </Box>
     );

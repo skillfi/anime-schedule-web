@@ -2,9 +2,10 @@ import * as React from "react";
 import {Paper, Table, TableBodyProps, TableContainer, TablePagination} from "@mui/material";
 import TableHeadComponent from "./table-head/table-head.component";
 import TableBodyComponent from "./table-body/table-body.component";
-import {IAnime} from "../../types/types";
+import {Episode, IAnime} from "../../types/types";
+import TableRowBodyComponent from "./table-row/table-row-body.component";
+import TableCellBodyComponent from "./table-cell/table-cell-body.component";
 import {Episodes} from "../../components/anime-list/anime-list.component";
-import Row from "./collapse/collapse-box/collapse-table-cell.component";
 
 /** User List Props
  * @property {string} list_name - `User List Name`
@@ -12,17 +13,9 @@ import Row from "./collapse/collapse-box/collapse-table-cell.component";
  * @property {Array<string>} columns - `Table Head Cells`
  */
 interface UserListProps extends TableBodyProps {
-    /** User List Name
-     * @default Favorites
-     */
-    list_name: string;
-    /** Anime List from response
-     * @default BookmarkRow[]
-     */
-    rows: IAnime[];
+    rows: Episode[];
     columns: any[];
     lists?: string[]
-    type?: string;
     episodes?: Episodes[]
 
 }
@@ -30,7 +23,7 @@ interface UserListProps extends TableBodyProps {
 /** Table Class Component
  * @property {UserListProps} props - `Table Props`
  */
-export default class TableComponent extends React.Component<UserListProps,
+export default class TableEpisodeComponent extends React.Component<UserListProps,
     { page: number, rowsPerPage: number, book: IAnime[], lists: string[], anime: IAnime[], open: boolean }> {
     lists: string[] = []
     book: IAnime[] = []
@@ -63,15 +56,20 @@ export default class TableComponent extends React.Component<UserListProps,
                 <TableContainer>
                     <Table sx={{minWidth: 250}} aria-label={"simple table"} size={"small"}>
                         <TableHeadComponent columns={this.props.columns}/>
-                        <TableBodyComponent rows={this.props.rows} page={this.state.page}
+                        <TableBodyComponent rows={this.props.rows}
+                                            page={this.state.page}
                                             rowsPerPage={this.state.rowsPerPage}
-                                            renderRows={(row: IAnime) => (
-                                                <Row cell={row} anime={row} type={this.props.type}
-                                                     lists={this.props.lists} key={row.id}
-                                                     box_name={'Episodes'}
-                                                     episodes={this.props.episodes}/>
+                                            renderRows={(row: Episode, index) => (
+                                                <TableRowBodyComponent columns={this.props.columns} renderCells={
+                                                    (cell: string, index) =>
+                                                        <TableCellBodyComponent cell={row} cellName={cell.toLowerCase()}
+                                                                                align={"center"} list_name={''}
+                                                                                all_lists={[]}
+                                                                                key={index}/>
+                                                } key={index}/>
                                             )}
                                             list_name={'Favorites'}/>
+
                     </Table>
                 </TableContainer>
                 <TablePagination

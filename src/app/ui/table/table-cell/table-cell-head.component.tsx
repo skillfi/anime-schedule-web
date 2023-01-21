@@ -1,8 +1,10 @@
 import * as React from "react";
-import {TableCell, tableCellClasses} from "@mui/material";
+import {Button, IconButton, TableCell, tableCellClasses} from "@mui/material";
+import AddBoxIcon from '@mui/icons-material/AddBox';
 import {useState} from "react";
 import {IAnime} from "../../../types/types";
 import { styled } from '@mui/material/styles';
+import GenerateAnimeButtonComponent from "../../buttons/generate-anime-button.component";
 
 /** Table Cell Props
  * @property {string} cellName - `Cell Name`
@@ -15,7 +17,7 @@ interface TableCellProps {
     collapse: boolean;
 }
 
-function render(name: string) {
+function render(name: any) {
     switch (name) {
         case 'full_name': {
             break;

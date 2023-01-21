@@ -1,6 +1,14 @@
 import http from "../../http-common";
 import * as React from "react";
-import {AnimeIdResponse, AnimeResponse, IAnime, UserAnimeProps} from "../types/types";
+import {
+    AnimeIdResponse,
+    AnimeResponse,
+    Episode,
+    EpisodeResponse,
+    EpisodesResponse,
+    IAnime,
+    UserAnimeProps
+} from "../types/types";
 import {environment} from "../../environments/environment";
 import {from, of} from "rxjs";
 
@@ -42,8 +50,8 @@ function create(data: FormData) {
     return http.post(environment.apiUrl + '/anime', data);
 }
 
-function update(id: number, data: FormData) {
-    const promise =  http.put('/anime' + id, data);
+function update(id: string, data: FormData) {
+    const promise =  http.put('/anime/' + id, data);
     return from(promise)
 }
 
@@ -74,6 +82,13 @@ function unsubscribe(anime_id: string){
     return from(http.delete(environment.apiUrl + `/subscribe/anime/${anime_id}/me`))
 }
 
+function getEpisodes(){
+    return from(http.get<EpisodesResponse>('/updates'))
+}
+function getEpisodesByAnimeId(anime_id: string){
+    return from(http.get<EpisodeResponse>('/updates/anime/'+anime_id))
+}
+
  const AnimeService = {
     getAll,
      getById,
@@ -84,7 +99,9 @@ function unsubscribe(anime_id: string){
      subscribe,
      getSubscribe,
      unsubscribe,
-     getByIdAsync
+     getByIdAsync,
+     getEpisodes,
+     getEpisodesByAnimeId
 }
 
 export default AnimeService

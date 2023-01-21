@@ -1,5 +1,5 @@
 import * as React from "react";
-import {Box, Collapse, Table, Typography} from "@mui/material";
+import {Collapse} from "@mui/material";
 
 interface CollapseProps<T> {
     collapse_name: string;

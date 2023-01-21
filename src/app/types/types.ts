@@ -1,7 +1,36 @@
 import React from "react";
 
+/** ObjectId preview
+ * @property {string} $oid - `Object Id`
+ */
 export interface ObjectId {
     '$oid': string
+}
+
+export interface EpisodesResponse{
+    data: Episodes[]
+}
+export interface EpisodeResponse{
+    data: Episode[]
+}
+
+/** Episode Object
+ * @property {ObjectId} _id - `Episode Id`
+ * @property {string} air_date - `On Tv`
+ * @property {number} duration - `Series Duration`
+ * @property {number} episode_id - `Episode Nomer`
+ * @property {string} full_title - `Episode Full Title`
+ * @property {string} title - `Short Title`
+ * @property {string} anime_id - `Anime Id`
+ */
+export interface Episodes {
+    id: string;
+    air_date: string;
+    duration: number;
+    episode_id: number;
+    full_title: string;
+    title: string;
+    anime_id: string;
 }
 
 export interface Episode {
@@ -10,23 +39,20 @@ export interface Episode {
     duration: number;
     episode_id: number;
     full_title: string;
-    title: string
+    title: string;
+    anime_id: string;
 }
 
 export interface Anime{
-    _id: ObjectId;
+    id: string;
     name: string;
     rating: number;
     episodes: number;
     release_date: string;
-    country: string;
-    genres: string[];
     subscribe: boolean;
-    inList: string;
     quality: number;
     image: string;
-    episodes_list: Episode[];
-    time: number
+    series: Episodes[];
 }
 
 /** Anime Response
@@ -85,6 +111,8 @@ export interface ALState {
     url: string;
 }
 
+export interface Episodes{}
+
 /** Anime Interface
  * @property {string} id - `Anime Id`
  * @property {string} name - `Anime Name`
@@ -99,6 +127,7 @@ export interface ALState {
  * @property {number} time - `Anime Time`
  * @property {string} [action] - `Actions on Table`
  * @property {boolean} subscribe - `User Subscribe`
+ * @property {string} url - `Anime Url`
  */
 export interface IAnime {
     id: string;
@@ -110,11 +139,13 @@ export interface IAnime {
     genres?: string[];
     quality: number;
     image: string;
-    episodes_list?: Episode[];
+    episodes_list: Episode[];
     time: number;
     full_name: string;
     actions?: string;
     subscribe: boolean;
+    bookmarks: string[]
+    url: string;
 }
 
 export interface ISetting {
@@ -174,12 +205,12 @@ export interface UAnime{
 
 
 /** User List Interface
- * @property {string} anime_id - `Anime Id`
- * @property {string} bookmark_id - `Bookmark Id`
- * @property {string} id - `List Id`
+ * @property {IAnime} anime - `Anime object`
+ * @property {string} bookmark_id - `Bookmark id`
+ * @property {string} id - `List id`
  */
 export interface IUserList{
-    anime_id: string;
+    anime: IAnime;
     bookmark_id: string;
     id: string;
 }
@@ -191,17 +222,36 @@ export interface IUserList{
  */
 export interface UserBookmark{
     bookmark_name: string;
-    user_id: string;
+}
+
+/** Users Bookmarks
+ * @property {IAnime} anime - `Anime Object`
+ * @property {string} bookmark_id - `Id`
+ * @property {string} id - `id`
+ */
+export interface UsersMyBookmarks{
+    anime: IAnime;
+    bookmark_id: string;
     id: string;
 }
 
-/** User Bookmark Model
- * @property {Array<IUserList>} anime_list - `list with anime`
- */
-export interface UsersBookmark extends UserBookmark{
-    anime_list: IUserList[]
+export interface UserBookmarkResponse{
+    data: string[]
 }
 
+/** User Bookmark Model
+ * @property {Array<IAnime>} anime_list - `list with anime`
+ * @property {string} bookmark_name - `Bookmark name`
+ * @property {string} id - `User Bookmark id`
+ */
+export interface UsersBookmark extends UserBookmark{
+    anime_list: UsersMyBookmarks[]
+}
+
+/** Users List Response
+ * @api /users-list/me
+ * @property {Array<UsersBookmark>} data - `Users Bookmark Data`
+ */
 export interface UsersBookmarkResponse{
     data: UsersBookmark[]
 }

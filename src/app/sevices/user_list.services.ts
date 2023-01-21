@@ -6,7 +6,7 @@ import {
     IUserListMe,
     IUsersList,
     IUsersListResponse,
-    UserBookmark,
+    UserBookmark, UserBookmarkResponse,
     UserBookmarks,
     UsersBookmark, UsersBookmarkResponse
 } from "../types/types";
@@ -19,12 +19,8 @@ function getMyList(list_name: string){
     }))
 }
 
-async function getMyListAsync(list_name: string){
-    return await http.get<IUsersList>('/users-list/me', {
-        params: {
-            list_name: list_name
-        }
-    })
+function getMyBookmarks(){
+    return from(http.get<UserBookmarkResponse>('/users-bookmarks/me'))
 }
 
 function getAllMyLists(){
@@ -59,9 +55,9 @@ const UserListService = {
     updateMyList,
     removeFromMyList,
     getAllMyLists,
-    getMyListAsync,
     createNew,
-    get_lists_names
+    get_lists_names,
+    getMyBookmarks
 }
 
 export default UserListService;

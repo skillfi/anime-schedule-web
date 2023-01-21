@@ -3,7 +3,7 @@ import {TableBody} from "@mui/material";
 
 interface TableBodyProps<T> {
     rows: T[];
-    renderRows: (row: T) => JSX.Element;
+    renderRows: (row: T, index: number) => JSX.Element;
     list_name?:string;
     cellNames?: string[]
     rowsPerPage: number;

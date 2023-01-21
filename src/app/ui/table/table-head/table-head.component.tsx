@@ -1,5 +1,5 @@
 import * as React from "react";
-import {TableHead} from "@mui/material";
+import {TableCell, TableHead} from "@mui/material";
 import TableRowHeadComponent from "../table-row/table-row-head.component";
 import TableCellHeadComponent from "../table-cell/table-cell-head.component";
 
@@ -17,7 +17,7 @@ export default function TableHeadComponent(props: TableHeadProps) {
         <TableHead>
             <TableRowHeadComponent cells={props.columns} renderCells={(cell, index)=>(
                 <TableCellHeadComponent cellName={cell} align={'center'} collapse={false} key={index}/>
-            )}/>
+            )} key={1}/>
         </TableHead>
     )
 }

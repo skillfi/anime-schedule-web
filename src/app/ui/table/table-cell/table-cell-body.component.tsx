@@ -1,34 +1,34 @@
 import * as React from "react";
-import {Avatar, Checkbox, Rating, TableCell, tableCellClasses} from "@mui/material";
-import {IAnime} from "../../../types/types";
+import {Avatar, Rating, TableCell, tableCellClasses} from "@mui/material";
 import StatusComponent from "../../status/status.component";
 import IncotermComponent from "../../incoterm/incoterm.component";
-import {getColumnNames} from "../../../helpers/toolls";
-import {useEffect, useState} from "react";
-import animeServices from "../../../sevices/anime.services";
-import UserListService from "../../../sevices/user_list.services";
 import {styled} from "@mui/material/styles";
 import SubscribeComponent from "../../subscribe/subscribe.component";
-import MultipleSelectChip from "../../multiple-select-chip/multiple-select-chip.component";
+import MultipleSelectChipComponent from "../../multiple-select-chip/multiple-select-chip.component";
+import RefreshAnimeButtonComponent from "../../buttons/refresh-anime-button.component";
+import UpdateImageAnimeButtonComponent from "../../buttons/update-image-anime-button.component";
 
 /** Table Cell Props
- * @property {string} id - `Anime Id To Render`
- * @property {IAnime} cellName - `Cell Name`
+ * @property {string} id - `Anime id To Render`
+ * @property {T} cell - `Cell Object`
+ * @property {string} cellName - `Cell Name`
  * @property {"left", "center", "right", "justify", "inherit"} align - `Table Cell Align`
- * @property {boolean} collapse - `Collapse Table`
  * @property {string} list_name - `Bookmark name`
+ * @property {Array<string>} all_lists - `All Existed Lists`
  */
-interface TableCellProps<T>{
-    id: string;
+interface TableCellProps<T> {
+    /** Object to get params
+     * @default T
+     */
     cell: T;
     cellName: string;
     align: "left" | "center" | "right" | "justify" | "inherit" | undefined;
     list_name: string;
-    cells: T[];
-    all_lists: string[];
+    all_lists: string[] | undefined;
+    buttons?: JSX.Element;
 }
 
-function render(object: any, name: string, lists: string[]){
+function render(object: any, name: string, lists: string[] | undefined, element?: JSX.Element) {
     switch (name) {
         case 'quality': {
             switch (object[name]) {
@@ -56,7 +56,8 @@ function render(object: any, name: string, lists: string[]){
             return <Avatar alt={object[name]} src={object[name]}/>
         }
         case 'rating': {
-            return (<Rating readOnly={true} value={object[name]}/>)
+            return (<div style={{alignContent: 'center'}}><Rating readOnly={true} value={object[name]/2}/>{object[name]}
+            </div>)
         }
         case 'full_name': {
             break;
@@ -67,11 +68,20 @@ function render(object: any, name: string, lists: string[]){
         case 'id': {
             break;
         }
-        case 'admin':{
+        case 'admin': {
             break;
         }
+        case 'episodes': {
+            return <div>{element} <code>{object['episodes_list'].length} / {object[name]}</code></div>
+        }
+        case 'actions': {
+            return <React.Fragment>
+                <RefreshAnimeButtonComponent row_id={object['id']} url={object['url']}/>
+                <UpdateImageAnimeButtonComponent row_id={object['id']} url={object['url']}/>
+            </React.Fragment>
+        }
         case 'bookmarks':
-            return <MultipleSelectChip bookmarks={lists} row_id={object['id']}></MultipleSelectChip>
+            return <MultipleSelectChipComponent bookmarks={object[name]} all_bookmarks={lists} row_id={object['id']}/>
         default: {
             // @ts-ignore
             return object[name]
@@ -98,18 +108,16 @@ const StyledTableCell = styled(TableCell)(({theme})=>({
  * @param {TableCellProps} props - `Table Cell Props`
  * @constructor
  */
-export default function TableCellBodyComponent<T>(props: TableCellProps<T>) {
-    // const [animeList, setAnimeList] = useState<IAnime[]>([])
-    const [anime, setAnime] = useState<IAnime>({id: '', name: '', rating: 0, full_name: '',
-        image: '', subscribe: false, country: '', episodes: 0, time: 0, quality: 360, release_date: ''})
+export default class TableCellBodyComponent<T> extends React.Component<TableCellProps<T>, any> {
+    constructor(props: TableCellProps<T>) {
+        super(props);
+    }
 
-    // useEffect(()=>{
-    //     setAnime(props.cell)
-    // }, [props.list_name, props.cell])
-
-    return (
-        <StyledTableCell align={props.align}>
-            {render(props.cell, props.cellName, props.all_lists)}
-        </StyledTableCell>
-    )
+    render() {
+        return (
+            <StyledTableCell align={this.props.align}>
+                {render(this.props.cell, this.props.cellName, this.props.all_lists, this.props.buttons)}
+            </StyledTableCell>
+        );
+    }
 }

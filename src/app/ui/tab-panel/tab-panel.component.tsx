@@ -9,7 +9,7 @@ interface TabPanelProps{
 
 }
 
-export default function TabPanelComponent(props: TabPanelProps){
+export default function TabPanelFC(props: TabPanelProps){
     const {children, value, index, ...other} = props;
 
     return (

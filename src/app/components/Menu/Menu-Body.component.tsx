@@ -3,6 +3,9 @@ import './Menu.css'
 import VerticalTabs from "../../ui/tab-panel/vertical-tabs/vertical-tabs.component";
 import sessionService from "../../sevices/session.service";
 import {IAnime, TabComponent, TabProps} from "../../types/types";
+import AnimeServices from "../../sevices/anime.services";
+import {finalize} from "rxjs";
+import {useEffect, useState} from "react";
 
 
 /** Render Tabs Interface
@@ -20,20 +23,35 @@ export interface TabResult {
 export interface BookmarkRow {
     [index: string]: IAnime[];
 }
+export default class MenuBodyComponent extends React.Component<any, {anime: IAnime[]}>{
 
-export default function MenuBodyComponent() {
+    constructor(props: any) {
+        super(props);
+        this.state = {anime: []}
+        this.fetch = this.fetch.bind(this)
+    }
 
-    const demo = new Array<BookmarkRow>();
-    // @ts-ignore
-    demo['All'] = [{id: ''}]
+    book: IAnime[] = []
 
+    fetch(){
+        AnimeServices.getAll()
+            .pipe(finalize(()=> {
+                console.log(`Finalize: ${this.book}`)
+                this.setState({anime: this.book})
+            }))
+            .subscribe((response) => {
+                this.book = response.data.data
+            })
+    }
 
-    return (
-        <React.Fragment>
-            <VerticalTabs sx={{
-                flexGrow: 1, bgcolor: 'transparent', display: 'flex', width: 'max-content',
-                marginTop: 5, borderRadius: 5
-            }} admin={sessionService.isAdmin()} demo={demo}/>
-        </React.Fragment>
-    );
+    render() {
+        return (
+            <React.Fragment>
+                <VerticalTabs sx={{
+                    flexGrow: 1, bgcolor: 'transparent', display: 'flex', width: 'max-content',
+                    marginTop: 5, borderRadius: 5
+                }} admin={sessionService.isAdmin()} data={this.state.anime}/>
+            </React.Fragment>
+        );
+    }
 }

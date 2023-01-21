@@ -1,6 +1,6 @@
 /// <reference types="react-scripts" />
 
-const backendURL = getURL(true)
+const backendURL = getURL(false)
 const host = document.location.protocol + '//' + document.location.host
 
 
