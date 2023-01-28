@@ -5,6 +5,7 @@ import {useState} from "react";
 import {IAnime} from "../../../types/types";
 import { styled } from '@mui/material/styles';
 import GenerateAnimeButtonComponent from "../../buttons/generate-anime-button.component";
+import {StyledTableCell} from "./table-cell-anime.component";
 
 /** Table Cell Props
  * @property {string} cellName - `Cell Name`
@@ -15,9 +16,10 @@ interface TableCellProps {
     cellName: string;
     align: "left" | "center" | "right" | "justify" | "inherit" | undefined;
     collapse: boolean;
+    action_button: JSX.Element;
 }
 
-function render(name: any) {
+function render(name: any, button: JSX.Element) {
     switch (name) {
         case 'full_name': {
             break;
@@ -30,6 +32,9 @@ function render(name: any) {
         }
         case 'release_date':
             return 'Release Date'
+        case 'Actions': {
+            return button
+        }
         default: {
             // @ts-ignore
             return name.charAt(0).toUpperCase() + name.slice(1)
@@ -37,18 +42,6 @@ function render(name: any) {
     }
 
 }
-const StyledTableCell = styled(TableCell)(({theme})=>({
-    [`&.${tableCellClasses.head}`]: {
-        backgroundColor: theme.palette.common.black,
-        color: theme.palette.common.white,
-        fontSize: 14,
-        fontFamily: ['Consolas']
-    },
-    [`&.${tableCellClasses.body}`]: {
-        fontSize: 14,
-        fontFamily: ['Consolas']
-    },
-}))
 /** Table Cell Component
  *
  * @param {TableCellProps} props - `Table Cell Props`
@@ -59,9 +52,10 @@ export default function TableCellHeadComponent(props: TableCellProps) {
     // const [anime, setAnime] = useState<IAnime>({id: '', name: '', rating: 0, full_name: '',
     //     image: '', subscribe: false, country: '', episodes: 0, time: 0, quality: 360, release_date: ''})
 
+    const {align, cellName, action_button} = props
     return (
-        <StyledTableCell align={props.align} width={'max-content'}>
-            {render(props.cellName)}
+        <StyledTableCell width={'max-content'}>
+            {render(cellName, action_button)}
         </StyledTableCell>
     )
 }

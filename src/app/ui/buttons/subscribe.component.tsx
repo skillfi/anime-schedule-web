@@ -12,8 +12,8 @@ interface SubscribeProps{
 }
 export default class SubscribeComponent extends React.Component<SubscribeProps, { sub: boolean }>{
 
-    anime: IAnime = {id: '', bookmarks: [], name: '', release_date: '', image: '', rating: 0,
-    time:0, quality: 0, country: '', subscribe:false, episodes: 0, full_name: '', url: '', episodes_list: [] };
+    anime: IAnime = {_id: '', bookmarks: [], title: '', release_date: new Date(), image: '', rating: 0,
+    time:0, quality: 0, country: '', subscribe:false, episodes: 0, tag: [], url: '', episode: [] };
 
     constructor(props: SubscribeProps) {
         super(props);

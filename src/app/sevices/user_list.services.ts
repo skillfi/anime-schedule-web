@@ -1,18 +1,16 @@
-import {environment} from "../../environments/environment";
-import {from, of} from "rxjs";
+import {from} from "rxjs";
 import http from "../../http-common";
 import {
-    IUserList,
-    IUserListMe,
+    IAnime,
     IUsersList,
     IUsersListResponse,
-    UserBookmark, UserBookmarkResponse,
-    UserBookmarks,
-    UsersBookmark, UsersBookmarkResponse
+    UserBookmark,
+    UserBookmarkResponse,
+    UserBookmarks
 } from "../types/types";
 
 function getMyList(list_name: string){
-    return from(http.get<IUserListMe>('/users-list/me', {
+    return from(http.get<{ data: IUsersList }>('/users-list/me', {
         params: {
             list_name: list_name
         }
@@ -24,7 +22,7 @@ function getMyBookmarks(){
 }
 
 function getAllMyLists(){
-    return from(http.get<UsersBookmarkResponse>('/users-list/me'))
+    return from(http.get<{ data: IUsersList[] }>('/users-list/me'))
 }
 
 function getAll(){
@@ -32,9 +30,9 @@ function getAll(){
 }
 
 function updateMyList(data: Object){
-    return from(http.put<IUserListMe>('/users-list/me', data, {
-        headers:{'Content-type': 'application/json'}
-    } ))
+    return from(http.put<{ data: IAnime }>('/users-list/me', data, {
+        headers: {'Content-type': 'application/json'}
+    }))
 }
 
 function removeFromMyList(data: FormData){

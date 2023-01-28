@@ -4,7 +4,7 @@ import TableHeadComponent from "./table-head/table-head.component";
 import TableBodyComponent from "./table-body/table-body.component";
 import {Episode, IAnime} from "../../types/types";
 import TableRowBodyComponent from "./table-row/table-row-body.component";
-import TableCellBodyComponent from "./table-cell/table-cell-body.component";
+import TableCellEpisodesComponent from "./table-cell/table-cell-episodes.component";
 import {Episodes} from "../../components/anime-list/anime-list.component";
 
 /** User List Props
@@ -54,7 +54,7 @@ export default class TableEpisodeComponent extends React.Component<UserListProps
         return (
             <Paper>
                 <TableContainer>
-                    <Table sx={{minWidth: 250}} aria-label={"simple table"} size={"small"}>
+                    <Table sx={this.props.sx} aria-label={"simple table"} size={"small"}>
                         <TableHeadComponent columns={this.props.columns}/>
                         <TableBodyComponent rows={this.props.rows}
                                             page={this.state.page}
@@ -62,10 +62,9 @@ export default class TableEpisodeComponent extends React.Component<UserListProps
                                             renderRows={(row: Episode, index) => (
                                                 <TableRowBodyComponent columns={this.props.columns} renderCells={
                                                     (cell: string, index) =>
-                                                        <TableCellBodyComponent cell={row} cellName={cell.toLowerCase()}
-                                                                                align={"center"} list_name={''}
-                                                                                all_lists={[]}
-                                                                                key={index}/>
+                                                        <TableCellEpisodesComponent cell={row} cellName={cell.toLowerCase()}
+                                                                                    align={"center"} list_name={''}
+                                                                                    key={index}/>
                                                 } key={index}/>
                                             )}
                                             list_name={'Favorites'}/>
@@ -120,7 +119,7 @@ export default class TableEpisodeComponent extends React.Component<UserListProps
 //                         props.rows[props.list_name]} page={page} rowsPerPage={rowsPerPage} renderRows={
 //                         (row: IAnime) => (<TableRowBodyComponent columns={props.columns} renderCells={
 //                             (cell: string, index) => (
-//                                 <TableCellBodyComponent cell={row} cellName={cell.toLowerCase()} align={'center'}
+//                                 <TableCellEpisodesComponent cell={row} cellName={cell.toLowerCase()} align={'center'}
 //                                                         id={index.toString()} list_name={props.list_name} cells={anime}
 //                                                         key={cell} all_lists={props.lists}/>)
 //                         } key={row.id}/>)}

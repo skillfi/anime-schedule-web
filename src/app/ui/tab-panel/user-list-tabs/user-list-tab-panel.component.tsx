@@ -1,5 +1,5 @@
 import * as  React from "react";
-import {Typography, Box, BoxProps} from "@mui/material";
+import {Typography, Box} from "@mui/material";
 
 
 interface TabPanelProps{
@@ -9,15 +9,15 @@ interface TabPanelProps{
 
 }
 
-export default function TabPanelFC(props: TabPanelProps){
+export default function UserListTabPanelComponent(props: TabPanelProps){
     const {children, value, index, ...other} = props;
 
     return (
         <div
             role={"tabpanel"}
             hidden={value !== index}
-            id={`vertical-tabpanel-${index}`}
-            aria-labelledby={`vertical-tab-${index}`}
+            id={`user-list-tab-panel-${index}`}
+            aria-labelledby={`user-list-tab-${index}`}
             key={index}
             {...other}>
             {value === index && (

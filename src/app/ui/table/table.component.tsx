@@ -1,10 +1,11 @@
 import * as React from "react";
-import {Paper, Table, TableBodyProps, TableContainer, TablePagination} from "@mui/material";
+import {Box, Paper, Table, TableBodyProps, TableContainer, TablePagination} from "@mui/material";
 import TableHeadComponent from "./table-head/table-head.component";
 import TableBodyComponent from "./table-body/table-body.component";
 import {IAnime} from "../../types/types";
 import {Episodes} from "../../components/anime-list/anime-list.component";
 import Row from "./collapse/collapse-box/collapse-table-cell.component";
+import {getWindowDimensions} from "../navbar/navbar.component";
 
 /** User List Props
  * @property {string} list_name - `User List Name`
@@ -21,9 +22,10 @@ interface UserListProps extends TableBodyProps {
      */
     rows: IAnime[];
     columns: any[];
-    lists?: string[]
+    lists: string[]
     type?: string;
     episodes?: Episodes[]
+    actions: string[]
 
 }
 
@@ -31,7 +33,8 @@ interface UserListProps extends TableBodyProps {
  * @property {UserListProps} props - `Table Props`
  */
 export default class TableComponent extends React.Component<UserListProps,
-    { page: number, rowsPerPage: number, book: IAnime[], lists: string[], anime: IAnime[], open: boolean }> {
+    { page: number, rowsPerPage: number, book: IAnime[], lists: string[], anime: IAnime[], open: boolean,
+        windowDimensions: ReturnType<typeof getWindowDimensions>}> {
     lists: string[] = []
     book: IAnime[] = []
     anime: IAnime[] = []
@@ -39,9 +42,11 @@ export default class TableComponent extends React.Component<UserListProps,
 
     constructor(props: UserListProps) {
         super(props);
-        this.state = {page: 0, rowsPerPage: 5, book: [], anime: [], lists: [], open: false}
+        this.state = {page: 0, rowsPerPage: 5, book: [], anime: [], lists: [], open: false,
+            windowDimensions: getWindowDimensions()}
         this.handleChangePage = this.handleChangePage.bind(this)
         this.handleChangeRowsPerPage = this.handleChangeRowsPerPage.bind(this)
+        this.handleResize = this.handleResize.bind(this)
     }
 
     handleChangePage(event: unknown, newPage: number) {
@@ -57,19 +62,32 @@ export default class TableComponent extends React.Component<UserListProps,
         this.setState({page: 0, rowsPerPage: 5, book: [], anime: [], lists: [], open: false})
     }
 
+    handleResize(){
+        this.setState({windowDimensions: getWindowDimensions()})
+    }
+
+    componentDidUpdate(prevProps: Readonly<UserListProps>,
+                       prevState: Readonly<{ page: number; rowsPerPage: number; book: IAnime[]; lists: string[];
+        anime: IAnime[]; open: boolean; windowDimensions: ReturnType<typeof getWindowDimensions> }>, snapshot?: any) {
+        window.addEventListener('click', this.handleResize)
+        return () => window.removeEventListener('click', this.handleResize)
+
+    }
+
     render() {
         return (
-            <Paper>
-                <TableContainer>
-                    <Table sx={{minWidth: 250}} aria-label={"simple table"} size={"small"}>
+            <Paper sx={{width: this.state.windowDimensions.minWidth * 0.8, overflow: 'hidden'}}>
+                <TableContainer sx={{minWidth: this.state.windowDimensions.minWidth * 0.8}}>
+                    <Table aria-label={"mui table"} size={"small"} align={'center'}>
                         <TableHeadComponent columns={this.props.columns}/>
                         <TableBodyComponent rows={this.props.rows} page={this.state.page}
                                             rowsPerPage={this.state.rowsPerPage}
                                             renderRows={(row: IAnime) => (
                                                 <Row cell={row} anime={row} type={this.props.type}
-                                                     lists={this.props.lists} key={row.id}
+                                                     lists={this.props.lists} key={row._id}
                                                      box_name={'Episodes'}
-                                                     episodes={this.props.episodes}/>
+                                                     episodes={row.episode}
+                                                actions={this.props.actions}/>
                                             )}
                                             list_name={'Favorites'}/>
                     </Table>
@@ -86,60 +104,4 @@ export default class TableComponent extends React.Component<UserListProps,
             </Paper>
         );
     }
-
 }
-
-// /** Table To View Information about Anime
-//  *
-//  * @param props - `UserListProps`
-//  * @type {UserListProps}
-//  * @constructor
-//  */
-// export function UserListComponent(props: UserListProps) {
-//     const [anime, setAnime] = useState<IAnime[]>([])
-//     const [rowsPerPage, setRowsPerPage] = React.useState(5);
-//     const [page, setPage] = React.useState(0);
-//
-//     const handleChangePage = (event: unknown, newPage: number) => {
-//         setPage(newPage);
-//     };
-//
-//     const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>) => {
-//         setRowsPerPage(parseInt(event.target.value, 10));
-//         setPage(0);
-//     };
-//
-//     const data: IAnime = {id: '0', full_name: 'Demonstration', episodes: 12, time: 25, subscribe: false,
-//         country: 'Japan', quality: 1080, rating: 5, image: 'Demo', name: 'Demo', release_date: ''}
-//     const Adata: IAnime[] = [data, data, data, data]
-//     // @ts-ignore
-//     return (
-//         <Paper>
-//             <TableContainer>
-//                 <Table sx={{minWidth: 250}} aria-label={"simple table"}>
-//                     <TableHeadComponent columns={props.columns}/>
-//                     <TableBodyComponent rows={// @ts-ignore
-//                         props.rows[props.list_name]} page={page} rowsPerPage={rowsPerPage} renderRows={
-//                         (row: IAnime) => (<TableRowBodyComponent columns={props.columns} renderCells={
-//                             (cell: string, index) => (
-//                                 <TableCellBodyComponent cell={row} cellName={cell.toLowerCase()} align={'center'}
-//                                                         id={index.toString()} list_name={props.list_name} cells={anime}
-//                                                         key={cell} all_lists={props.lists}/>)
-//                         } key={row.id}/>)}
-//                                         list_name={props.list_name}/>
-//                 </Table>
-//             </TableContainer>
-//             <TablePagination
-//                 rowsPerPageOptions={[5, 10, 25]}
-//                 component="div"
-//                 // @ts-ignore
-//                 count={!props.rows[props.list_name] ? 1: props.rows[props.list_name].length}
-//                 rowsPerPage={rowsPerPage}
-//                 page={page}
-//                 onPageChange={handleChangePage}
-//                 onRowsPerPageChange={handleChangeRowsPerPage}
-//             />
-//         </Paper>
-//
-//     )
-// }

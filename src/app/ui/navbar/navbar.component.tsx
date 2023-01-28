@@ -1,5 +1,5 @@
 import * as React from "react";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import './navbar.component.scss'
 import {Atom} from 'phosphor-react'
 import LogoutIcon from '@mui/icons-material/Logout';
@@ -20,13 +20,18 @@ import {finalize} from "rxjs";
 import {ISetting} from "../../types/types";
 import MenuListComponent from "../../components/Menu/Menu-List.component";
 
+export function getWindowDimensions(){
+    const {innerWidth: width, innerHeight: height, outerWidth: minWidth, outerHeight: minHeight} = window
+    return {width, height, minWidth, minHeight}
+}
 
 export default function NavBarComponent() {
     const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
     const [settings, setSettings] = useState<ISetting[]>([])
     const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
-    const pages = ['Genres', 'Ongoings']
+    const [windowDimensions, setWindowDimensions] = useState(getWindowDimensions());
     const navigate = useNavigate()
+
 
     let Setting: ISetting = {
         icon: <LogoutIcon/>,
@@ -46,19 +51,27 @@ export default function NavBarComponent() {
         setAnchorElNav(null);
     };
 
+    useEffect(() => {
+        function handleResize() {
+            setWindowDimensions(getWindowDimensions());
+        }
+        window.addEventListener('click', handleResize)
+        return () => window.removeEventListener('click', handleResize)
+
+    }, []);
+
     const handleCloseUserMenu = () => {
         setAnchorElUser(null);
     };
     return (
-        <AppBar position="static">
-            <Container maxWidth="xl">
+        <AppBar position="static" sx={{width: windowDimensions.minWidth}}>
+            <Container>
                 <Toolbar disableGutters>
                     <Atom size={40}/>
                     <Typography
                         variant="h6"
                         noWrap
-                        component="a"
-                        href="/anische"
+                        component="h2"
                         sx={{
                             mr: 2,
                             display: {xs: 'none', md: 'flex'},
@@ -67,8 +80,10 @@ export default function NavBarComponent() {
                             letterSpacing: '.2rem',
                             color: 'inherit',
                             textDecoration: 'none',
-                            textAlign: 'center'
+                            textAlign: 'center',
+                            cursor: 'help'
                         }}
+                        onClick={()=>navigate('/menu')}
                     >
 
                         {' Anime Schedule'}

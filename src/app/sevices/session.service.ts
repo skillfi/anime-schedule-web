@@ -1,5 +1,3 @@
-import {IUser} from "../types/types";
-
 function setCurrentUser(currentUser: any) {
     localStorage.setItem('currentUser', JSON.stringify(currentUser))
 }
@@ -18,7 +16,7 @@ function setToken(token: any) {
     sessionStorage.setItem('token', JSON.stringify(token))
 }
 
-function getToken(){
+function getToken() {
     const item = sessionStorage.getItem('token');
     return item ? JSON.parse(item) : false;
 }

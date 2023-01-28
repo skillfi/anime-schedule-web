@@ -6,7 +6,12 @@ export class Url{
     path: string = ''
 
     constructor(firstLevel: string, secondLevel?: string) {
-        this.path = this.basePath + firstLevel;
+        if (secondLevel){
+            this.path = firstLevel + secondLevel;
+        }
+        else {
+            this.path = firstLevel
+        }
     }
 
     /**

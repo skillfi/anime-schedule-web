@@ -1,9 +1,10 @@
 import * as React from 'react';
-import HorizontalTabsComponent from "../../ui/tab-panel/horizontal-tabs/horizontal-tabs.component";
+import UserListTabComponent from "../../ui/tab-panel/user-list-tabs/user-list-tabs.component";
 import UserListService from "../../sevices/user_list.services";
 import {finalize} from "rxjs";
 import {IAnime} from "../../types/types";
 import * as colors from "@mui/material/colors";
+import {getWindowDimensions} from "../../ui/navbar/navbar.component";
 
 interface UserListProps{
     user_lists: string[]
@@ -30,18 +31,13 @@ export default class UserListComponent extends React.Component<UserListProps,
     fetchLists(){
         UserListService.getAllMyLists()
             .pipe(finalize(() => {
-                console.log(`Get All Lists ${this.state.UserList}`)
-
                 this.setState({UserList: this.user_list, bookmarks: this.lists})
             }))
             .subscribe((response) => {
                 let users_list: UserListRow = {};
                 let lists: string[] = []
                 response.data.data.map((user_list) => {
-                    users_list[user_list.bookmark_name] = []
-                    user_list.anime_list.map((obj)=>{
-                        users_list[user_list.bookmark_name].push(obj.anime)
-                    })
+                    users_list[user_list.bookmark_name] = user_list.anime
                     this.user_list = users_list
                     lists.push(user_list.bookmark_name)
                     this.lists = lists
@@ -62,11 +58,11 @@ export default class UserListComponent extends React.Component<UserListProps,
     render() {
         return (
             <React.Fragment>
-                <HorizontalTabsComponent key={1}
-                                         type={"user"}
-                                         sx={{borderBottom: 1, borderColor: 'divider', width: '100%'}}
-                                         bookmarks={this.state.bookmarks}
-                UserList={this.state.UserList}/>
+                <UserListTabComponent key={1}
+                                      type={"user"}
+                                      sx={{borderBottom: 1, borderColor: 'divider'}}
+                                      bookmarks={this.state.bookmarks}
+                                      UserList={this.state.UserList}/>
             </React.Fragment>
         );
     }

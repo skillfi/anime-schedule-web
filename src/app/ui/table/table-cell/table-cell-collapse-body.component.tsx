@@ -4,7 +4,7 @@ import {Episode, IAnime} from "../../../types/types";
 import StatusComponent from "../../status/status.component";
 import IncotermComponent from "../../incoterm/incoterm.component";
 import {styled} from "@mui/material/styles";
-import SubscribeComponent from "../../subscribe/subscribe.component";
+import SubscribeComponent from "../../buttons/subscribe.component";
 import MultipleSelectChipComponent from "../../multiple-select-chip/multiple-select-chip.component";
 import RefreshAnimeButtonComponent from "../../buttons/refresh-anime-button.component";
 import CollapseBoxComponent from "../collapse/collapse-box/collapse-table-cell.component";

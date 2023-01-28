@@ -1,6 +1,7 @@
 import * as React from "react";
 import AddBoxIcon from "@mui/icons-material/AddBox";
 import {
+    AlertColor,
     Button, ButtonProps, Dialog,
     DialogActions,
     DialogContent,
@@ -12,12 +13,14 @@ import {
 import UserListService from "../../sevices/user_list.services";
 import {finalize} from "rxjs";
 import AnimeServices from "../../sevices/anime.services";
+import CustomAlert from "../alert/CustomAlert";
 
-export default class GenerateAnimeButtonComponent extends React.Component<ButtonProps, {url: string, open: boolean}>{
+export default class GenerateAnimeButtonComponent extends React.Component<ButtonProps, {url: string,
+    open: boolean, alert: boolean, severity: AlertColor, message: string}>{
 
     constructor(props: ButtonProps) {
         super(props);
-        this.state = {url: '', open: false}
+        this.state = {url: '', open: false, alert: false, severity: 'success', message: ''}
         this.handleClose = this.handleClose.bind(this)
         this.handleAdd = this.handleAdd.bind(this)
         this.onChange = this.onChange.bind(this)
@@ -27,8 +30,18 @@ export default class GenerateAnimeButtonComponent extends React.Component<Button
     handleAdd() {
         this.data.append('url', this.state.url)
         AnimeServices.generateAnime(this.data)
-            .pipe(finalize(()=>this.setState({open: false})))
-            .subscribe(()=>{})
+            .subscribe((response)=>{
+                switch (response.status) {
+                    case 200: {
+                        this.setState({open: false, severity: 'success', alert: true, message: response.statusText})
+                        break;
+                    }
+                    case 400: {
+                        this.setState({open: false, severity: 'error', alert: true, message: response.statusText})
+                        break;
+                    }
+                }
+            })
     }
 
     handleClose(){
@@ -49,11 +62,11 @@ export default class GenerateAnimeButtonComponent extends React.Component<Button
     render() {
         return (
             <React.Fragment>
-                <IconButton color="primary" aria-label="Generate Anime"
+                <Button color="primary" aria-label="Generate Anime"
                             onClick={()=>this.setState({open: true})} sx={this.props.sx}
-                size={this.props.size}>
-                    <AddBoxIcon />
-                </IconButton>
+                size={this.props.size} startIcon={<AddBoxIcon/>}>
+                    Add New
+                </Button>
                 <Dialog open={this.state.open} onClose={this.handleClose}>
                     <DialogTitle>Generate</DialogTitle>
                     <DialogContent>
@@ -77,6 +90,12 @@ export default class GenerateAnimeButtonComponent extends React.Component<Button
                         <Button onClick={this.handleAdd}>Add</Button>
                     </DialogActions>
                 </Dialog>
+                <CustomAlert message={this.state.message} open={this.state.alert} severity={this.state.severity}
+                onClick={()=> {
+                    // eslint-disable-next-line no-restricted-globals
+                    location.reload()
+                    this.setState({alert: false})
+                }}/>
             </React.Fragment>
 
         );

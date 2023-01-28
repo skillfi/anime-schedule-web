@@ -1,19 +1,16 @@
 import http from "../../http-common";
 import sessionService from "./session.service";
-import {ILogin, ILogout, LoginResponse} from "../types/types";
+import {ILogin} from "../types/types";
 import {environment} from "../../environments/environment";
-import Axios, {AxiosObservable} from "axios-observable";
 import {from} from "rxjs";
 
 
-function logIn(data: FormData){
-    const promise = http.post<LoginResponse>('/login',data)
-    const result = from(promise)
-    return result
+function logIn(data: FormData) {
+    return from(http.post<{ data: ILogin }>('/login', data))
 }
 
-function logOut(){
-    return  from(http.post<ILogout>(environment.apiUrl + '/logout'))
+function logOut() {
+    return from(http.post<{ data: [] }>(environment.apiUrl + '/logout'))
 }
 
 function isLoggedIn() {

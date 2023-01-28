@@ -1,8 +1,7 @@
 import * as React from "react";
-import HorizontalTabsComponent from "../../ui/tab-panel/horizontal-tabs/horizontal-tabs.component";
-import {IAnime} from "../../types/types";
 import AnimeServices from "../../sevices/anime.services";
 import {finalize} from "rxjs";
+import AdministrationTabComponent from "../../ui/tab-panel/administration-tabs/administration-tabs.component";
 
 interface UserListRow{
     [index: string]: any[]
@@ -34,11 +33,11 @@ AdminList: UserListRow}>{
     render() {
         return (
             <React.Fragment>
-                <HorizontalTabsComponent key={2}
-                                         type={'admin'}
-                                         sx={{borderBottom: 1, borderColor: 'divider', width: '100%'}}
-                                         bookmarks={this.state.bookmarks}
-                UserList={this.state.AdminList}/>
+                <AdministrationTabComponent key={2}
+                                            type={'admin'}
+                                            sx={{borderBottom: 1, borderColor: 'divider', width: '100%'}}
+                                            bookmarks={this.state.bookmarks}
+                                            UserList={this.state.AdminList}/>
             </React.Fragment>
         );
     }

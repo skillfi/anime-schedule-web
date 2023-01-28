@@ -7,13 +7,6 @@ export interface ObjectId {
     '$oid': string
 }
 
-export interface EpisodesResponse{
-    data: Episodes[]
-}
-export interface EpisodeResponse{
-    data: Episode[]
-}
-
 /** Episode Object
  * @property {ObjectId} _id - `Episode Id`
  * @property {string} air_date - `On Tv`
@@ -33,50 +26,26 @@ export interface Episodes {
     anime_id: string;
 }
 
+/** Episode Interface
+ * @property {string} _id - `Episode id`
+ * @property {Date} air_date - `Episode Air Date`
+ * @property {number} duration - `Episode Duration`
+ * @property {number} episode_id - `Episode Number`
+ * @property {string} full_title - `Title in another languages`
+ * @property {string} title - `Official Title`
+ * @property {string} anime_id - `IAnime _id`
+ * @property {Array<string>} viewed - `User Viewed`
+ */
 export interface Episode {
-    _id: ObjectId;
-    air_date: string;
+    _id: string;
+    air_date: Date;
     duration: number;
     episode_id: number;
     full_title: string;
     title: string;
     anime_id: string;
-}
-
-export interface Anime{
-    id: string;
-    name: string;
-    rating: number;
-    episodes: number;
-    release_date: string;
-    subscribe: boolean;
-    quality: number;
-    image: string;
-    series: Episodes[];
-}
-
-/** Anime Response
- * @property {Array<IAnime>} data - `Anime Response Data`
- */
-export interface AnimeResponse{
-    /**
-     * Response Data
-     * @type {Array<IAnime>}
-     * @default []
-     */
-    data: IAnime[];
-}
-
-/** Anime Response
- * @property {IAnime} data - `Response data`
- */
-export interface AnimeIdResponse{
-    /**
-     * Response Data
-     * @type {IAnime}
-     * @default IAnime
-     */
-    data: IAnime;
+    viewed: string[];
+    view: boolean;
 }
 
 export interface IUser {
@@ -96,67 +65,56 @@ export interface ILogin {
     user: IUser;
 }
 
-export interface LoginResponse {
-    data: ILogin
-}
-
-export interface ILogout {
-    data: []
-}
-
 export interface ALState {
     open: boolean;
     style?: any;
-
     url: string;
 }
 
-export interface Episodes{}
-
 /** Anime Interface
- * @property {string} id - `Anime Id`
- * @property {string} name - `Anime Name`
- * @property {number} rating - `Anime Rating`
- * @property {number} episodes - `Anime Episodes`
- * @property {string} release_date - `Anime Release`
- * @property {string} country - `Anime Country`
- * @property {Array<string>} [genres] - `Anime Genres List`
- * @property {number} quality - `Anime Quality`
+ * @property {string} _id - `Anime Id`
+ * @property {Array<string>} bookmarks - `User Bookmarks`
+ * @property {string} [country] - `Anime Country`
+ * @property {Array<Episode>} episode - `Episodes List`
+ * @property {number} episodes - `Episodes Count`
+ * @property {string} title - `Anime Title`
  * @property {string} image - `Anime Avatar`
- * @property {Array<Episode>} [episode_list] - `Anime Episode List`
- * @property {number} time - `Anime Time`
- * @property {string} [action] - `Actions on Table`
+ * @property {string} [title_en] - `Anime Title english`
+ * @property {string} [title_jp] - `Anime title Japan`
+ * @property {number} quality - `Anime Quality`
+ * @property {number} rating - `Anime Rating`
+ * @property {Date} release_date - `Anime Release`
  * @property {boolean} subscribe - `User Subscribe`
- * @property {string} url - `Anime Url`
+ * @property {Array<string>} subscribers - `Anime Subscribers`
+ * @property {Array<string>} tag - `Anime Tags`
+ * @property {number} [time] - `Episodes Time`
+ * @property {string} url - `Url for Get Updates`
  */
 export interface IAnime {
-    id: string;
-    name: string;
-    rating: number;
+    _id: string;
+    bookmarks: string[];
+    country?: string;
+    episode: Episode[];
     episodes: number;
-    release_date: string;
-    country: string;
-    genres?: string[];
-    quality: number;
+    title: string;
     image: string;
-    episodes_list: Episode[];
-    time: number;
-    full_name: string;
-    actions?: string;
+    title_en?: string;
+    title_jp?: string;
+    quality: number;
+    rating: number;
+    release_date: Date;
     subscribe: boolean;
-    bookmarks: string[]
+    subscribers?: string[];
+    time?: number;
     url: string;
+    description?: string;
+    tag: string[]
 }
 
 export interface ISetting {
     icon: React.ReactNode | JSX.Element;
     text: string;
     link: string;
-}
-
-export interface SettingsArray<ISetting> {
-    settings: ISetting[]
-    renderSetting: (setting: ISetting) => React.ReactNode
 }
 
 export interface MenuListProps<T> {
@@ -194,26 +152,6 @@ export interface TabProps{
     icon: JSX.Element;
 }
 
-export interface UserAnimeProps{
-    subscription?: boolean;
-}
-
-export interface UAnime{
-    anime: IAnime;
-    props: UserAnimeProps;
-}
-
-
-/** User List Interface
- * @property {IAnime} anime - `Anime object`
- * @property {string} bookmark_id - `Bookmark id`
- * @property {string} id - `List id`
- */
-export interface IUserList{
-    anime: IAnime;
-    bookmark_id: string;
-    id: string;
-}
 
 /** User Bookmark Model
  * @property {string} bookmark_name - `Name`
@@ -224,54 +162,23 @@ export interface UserBookmark{
     bookmark_name: string;
 }
 
-/** Users Bookmarks
- * @property {IAnime} anime - `Anime Object`
- * @property {string} bookmark_id - `Id`
- * @property {string} id - `id`
- */
-export interface UsersMyBookmarks{
-    anime: IAnime;
-    bookmark_id: string;
-    id: string;
-}
-
 export interface UserBookmarkResponse{
     data: string[]
 }
 
-/** User Bookmark Model
- * @property {Array<IAnime>} anime_list - `list with anime`
- * @property {string} bookmark_name - `Bookmark name`
- * @property {string} id - `User Bookmark id`
- */
-export interface UsersBookmark extends UserBookmark{
-    anime_list: UsersMyBookmarks[]
-}
-
-/** Users List Response
- * @api /users-list/me
- * @property {Array<UsersBookmark>} data - `Users Bookmark Data`
- */
-export interface UsersBookmarkResponse{
-    data: UsersBookmark[]
-}
 
 export interface UserBookmarks{
     data: UserBookmark[]
 }
 
-/** User List Response
- * @property {Array<IUserList>} data - `User List`
- */
-export interface IUserListMe{
-    data: IUserList[]
-}
-
 /** User List Interface
- * @property {IUserList} data - `Anime List`
+ * @property {string} bookmark_name - `Name`
+ * @property {Array<IAnime>} anime - `Anime List`
  */
 export interface IUsersList{
-    data: IUserList
+    bookmark_name: string;
+    anime: IAnime[]
+    user_id: string;
 }
 
 export interface IUsersListResponse{

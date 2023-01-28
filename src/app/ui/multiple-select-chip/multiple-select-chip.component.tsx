@@ -39,22 +39,15 @@ function getStyles(bookmark: string, bookmarks: readonly string[], theme: Theme)
 interface MultiplyProps{
     bookmarks: string[];
     row_id: string;
-    all_bookmarks: string[] | undefined
+    all_bookmarks: string[]
 }
 
-// const StyledMenuItem = withStyles(theme => ({
-//         fontWeight: theme.typography.fontWeightRegular
-//     }
-// ))(MenuItem);
-
 export default class MultipleSelectChipComponent extends React.Component<MultiplyProps, { bookmark: string[],
-all: string[]}>{
-
-    anime: IAnime = {id: '', bookmarks: [], name: '', release_date: '', image: '', rating: 0,
-        time:0, quality: 0, country: '', subscribe:false, episodes: 0, full_name: '', url: '', episodes_list: []};
+all: string[], anime: IAnime}>{
     constructor(props: MultiplyProps) {
         super(props);
-        this.state = {bookmark: [], all: []}
+        this.state = {bookmark: this.props.bookmarks, all: [], anime: {_id: '', bookmarks: props.bookmarks, title: '', release_date: new Date(), image: '', rating: 0,
+                time:0, quality: 0, country: '', subscribe:false, episodes: 0, tag: [], url: '', episode: []}}
         this.handleChange = this.handleChange.bind(this)
         this.fetch = this.fetch.bind(this)
     }
@@ -62,9 +55,9 @@ all: string[]}>{
     all: string[] = []
     fetch(){
         animeServices.getById(this.props.row_id)
-            .pipe(finalize(()=>this.setState({bookmark: this.anime.bookmarks})))
+            .pipe(finalize(()=>this.setState({bookmark: this.state.anime.bookmarks})))
             .subscribe((response) => {
-                this.anime = response.data.data
+                this.setState({anime: response.data.data})
             })
     }
 
@@ -76,24 +69,21 @@ all: string[]}>{
             anime_list: list
         }
         UserListService.updateMyList(data)
-            .pipe(finalize(()=> this.fetch()))
-            .subscribe((()=>{}))
-            .unsubscribe()
-    }
-
-    componentDidMount() {
-        this.setState({bookmark: this.props.bookmarks})
+            .pipe(finalize(()=>this.fetch()))
+            .subscribe(((response)=>{
+                this.setState({anime: response.data.data})
+            }))
     }
 
     render() {
         return (
-            <FormControl sx={{ m: 1, width: 150 }}>
+            <FormControl sx={{ m: 1, width: 'max-content', minWidth: 100 }}>
                 <InputLabel id="demo-multiple-chip-label">BookMark</InputLabel>
                 <Select
                     labelId="demo-multiple-chip-label"
                     id="demo-multiple-chip"
                     multiple
-                    value={typeof this.state.bookmark == 'string' ? []: this.state.bookmark}
+                    value={this.state.bookmark}
                     onChange={this.handleChange}
                     input={<OutlinedInput id="select-multiple-chip" label="Chip" />}
                     renderValue={(selected) => (
@@ -105,14 +95,7 @@ all: string[]}>{
                     )}
                     MenuProps={MenuProps}
                 >
-                    {typeof this.props.all_bookmarks == 'undefined' ?  this.state.bookmark.map((book) => (
-                        <Menu
-                            key={book}
-                            value={book}
-                        >
-                            {book}
-                        </Menu>
-                    )): this.props.all_bookmarks.map((book)=>(
+                    {this.props.all_bookmarks.map((book)=>(
                         <Menu
                             key={book}
                             value={book}

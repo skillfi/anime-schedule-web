@@ -1,25 +1,27 @@
 import * as React from "react";
 import {Box, BoxProps, SxProps, Tab, Tabs} from "@mui/material";
 import * as colors from "@mui/material/colors";
-import TabPanelFC from "../tab-panel.component";
+import TabPanelFC from "../ui/tab-panel/tab-panel.component";
 import {createTheme, ThemeProvider} from '@mui/material/styles';
-import {IAnime} from "../../../types/types";
-import {BookmarkRow} from "../../../components/Menu/Menu-Body.component";
+import {IAnime} from "../types/types";
+import {BookmarkRow} from "./Menu/Menu-Body.component";
 import FormatListBulletedIcon from "@mui/icons-material/FormatListBulleted";
 import FolderSharedIcon from "@mui/icons-material/FolderShared";
 import CreateIcon from "@mui/icons-material/Create";
-import AnimeListComponent from "../../../components/anime-list/anime-list.component";
-import UserListComponent from "../../../components/users-list/user-list.component";
-import AdminListComponent from "../../../components/admin-list/admin-list.component";
+import AnimeListComponent from "./anime-list/anime-list.component";
+import UserListComponent from "./users-list/user-list.component";
+import AdminListComponent from "./admin-list/admin-list.component";
+import {getColors} from "../ui/styles/styles";
+import {getWindowDimensions} from "../ui/navbar/navbar.component";
 
 
 const theme = createTheme({
     palette: {
         primary: {
-            main: colors.lightBlue[300]
+            main: getColors('brown', 800)
         },
         secondary: {
-            main: colors.deepPurple[600]
+            main: getColors('brown', 700)
         },
     }
 });
@@ -71,22 +73,17 @@ export default class VerticalTabsComponent extends React.Component<VerticalTab, 
                         value={this.state.value}
                         onChange={this.handleChange}
                         aria-label="Panel"
-                        sx={{
-                            borderRight: 1, borderColor: 'divider', color: this.color,
-                            // background: `radial-gradient(${lblue}, ${colors.indigo[900]})`,
-                            borderRadius: 10
-                        }}
                         textColor="primary"
                         indicatorColor="secondary"
                     >
                         <Tab icon={<FormatListBulletedIcon/>} iconPosition={"start"}
                              label={'Anime List'} {...a11yProps(0)}
-                             sx={{fontFamily: ['Consolas'], borderRadius: 50, mt: 10}} key={1}/>
+                             sx={{fontFamily: ['Consolas'], borderRadius: 50}} key={1}/>
                         <Tab icon={<FolderSharedIcon/>} iconPosition={"start"} label={'My List'} {...a11yProps(1)}
-                             sx={{fontFamily: ['Consolas'], borderRadius: 50, mt: 10}} key={2}/>
+                             sx={{fontFamily: ['Consolas'], borderRadius: 50}} key={2}/>
                         {this.props.admin ?
                             <Tab icon={<CreateIcon/>} iconPosition={"start"} label={'Administration'} {...a11yProps(2)}
-                                 sx={{fontFamily: ['Consolas'], borderRadius: 50, mt: 10}} key={3}/> :
+                                 sx={{fontFamily: ['Consolas'], borderRadius: 50}} key={3}/> :
                             <React.Fragment/>}
                     </Tabs>
                 </ThemeProvider>

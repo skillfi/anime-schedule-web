@@ -1,8 +1,6 @@
 import * as React from "react";
-import {TableCell, tableCellClasses, TableRow} from "@mui/material";
-import {getColumnNames} from "../../../helpers/toolls";
+import {TableRow} from "@mui/material";
 import {styled} from "@mui/material/styles";
-import CollapseBoxComponent from "../collapse/collapse-box/collapse-table-cell.component";
 import {Episodes} from "../../../components/anime-list/anime-list.component";
 
 /** Table Cell Props
@@ -24,7 +22,8 @@ interface TableRowProps<C> {
     episodes?: Episodes;
 
 }
-const StyledTableRow = styled(TableRow)(({ theme }) => ({
+
+const StyledTableRow = styled(TableRow)(({theme}) => ({
     '&:nth-of-type(odd)': {
         backgroundColor: theme.palette.action.hover,
     },
@@ -34,7 +33,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
     },
 }));
 
-export default class TableRowCollapseBodyComponent<C> extends React.Component<TableRowProps<C>, any>{
+export default class TableRowCollapseBodyComponent<C> extends React.Component<TableRowProps<C>, any> {
 
     constructor(props: TableRowProps<C>) {
         super(props);
@@ -43,7 +42,7 @@ export default class TableRowCollapseBodyComponent<C> extends React.Component<Ta
     render() {
         return (
             <React.Fragment>
-                <StyledTableRow sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+                <StyledTableRow sx={{'&:last-child td, &:last-child th': {border: 0}}}>
                     {this.props.columns.map(this.props.renderCells)}
                 </StyledTableRow>
             </React.Fragment>

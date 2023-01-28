@@ -1,49 +1,19 @@
 import http from "../../http-common";
-import * as React from "react";
-import {
-    AnimeIdResponse,
-    AnimeResponse,
-    Episode,
-    EpisodeResponse,
-    EpisodesResponse,
-    IAnime,
-    UserAnimeProps
-} from "../types/types";
+import {Episode, IAnime} from "../types/types";
 import {environment} from "../../environments/environment";
-import {from, of} from "rxjs";
-
-function remove_anime(event: React.MouseEvent<HTMLButtonElement>, anime_id: number) {
-    // Preventing the page from reloading
-    event.preventDefault();
-    // console.log(this.props.formData)
-
-    // Do something
-    AnimeService.remove(anime_id).subscribe((response) => {
-        // console.log(res.data.data)
-        // SessionService.setCurrentUser(res.data.data?.user)
-        // SessionService.setToken(res.data.data?.user)
-        // return document.location.replace('/menu')
-    })
-}
-
-
-
-export interface AnimeTable{
-    id?: number;
-    name?: string;
-    release_date?: string;
-}
+import {from} from "rxjs";
+import {Url} from "../../url";
 
 function getAll() {
-    return from(http.get<AnimeResponse>(environment.apiUrl + '/anime'))
+    return from(http.get<{ data: IAnime[] }>(environment.apiUrl + '/anime'))
 }
 
-function getById(id: string) {
-    return from(http.get<AnimeIdResponse>(environment.apiUrl + '/anime/' + id));
+function getById(id: any) {
+    return from(http.get<{ data: IAnime }>(environment.apiUrl + '/anime/' + id));
 }
 
 async function getByIdAsync(id: string) {
-    return await http.get<AnimeIdResponse>(environment.apiUrl + '/anime/' + id);
+    return await http.get<{ data: IAnime }>(environment.apiUrl + '/anime/' + id);
 }
 
 function create(data: FormData) {
@@ -55,27 +25,16 @@ function update(id: string, data: FormData) {
     return from(promise)
 }
 
-function remove(id: number | undefined) {
-    return from(http.delete(environment.apiUrl + '/anime/' + id));
+function remove(id: string) {
+    return from(http.delete<{data: number}>(environment.apiUrl + '/anime/' + id));
 }
 
 function generateAnime(data: FormData) {
-    return from(http.post<IAnime>(environment.apiUrl + '/anime/generate', data));
+    return from(http.post<{ data: IAnime }>(environment.apiUrl + '/anime/generate', data));
 }
 
 function subscribe(data: FormData){
     return from(http.post(environment.apiUrl + '/subscribes', data));
-}
-
-function getSubscribe(row: IAnime[]){
-    let userProps: UserAnimeProps[] = [];
-    row.map((anime)=>{
-        from(http.get<{data: boolean}>(environment.apiUrl + `/subscribe/anime/${anime.id}/me`))
-            .subscribe((response)=>{
-                userProps.push({subscription: response.data.data})
-            }, ((e)=>alert(e)))
-    })
-    return userProps
 }
 
 function unsubscribe(anime_id: string){
@@ -83,10 +42,21 @@ function unsubscribe(anime_id: string){
 }
 
 function getEpisodes(){
-    return from(http.get<EpisodesResponse>('/updates'))
+    return from(http.get<{ data: Episode[] }>(new Url('/updates').path))
 }
 function getEpisodesByAnimeId(anime_id: string){
-    return from(http.get<EpisodeResponse>('/updates/anime/'+anime_id))
+    return from(http.get<{ data: Episode[] }>(new Url('/updates/anime/',anime_id).path))
+}
+
+function viewEpisode(episode_id: string) {
+    return from(http.put<{data: Episode}>(new Url('/anime/view/episode/', episode_id).path))
+}
+function un_viewEpisode(episode_id: string) {
+    return from(http.put<{data: Episode}>(new Url('/anime/un-view/episode/', episode_id).path))
+}
+
+function getEpisode(episode_id: string) {
+    return from(http.get<{data: Episode}>(new Url('/episode/', episode_id).path))
 }
 
  const AnimeService = {
@@ -97,11 +67,13 @@ function getEpisodesByAnimeId(anime_id: string){
      remove,
      update,
      subscribe,
-     getSubscribe,
      unsubscribe,
      getByIdAsync,
      getEpisodes,
-     getEpisodesByAnimeId
+     getEpisodesByAnimeId,
+     viewEpisode,
+     un_viewEpisode,
+     getEpisode
 }
 
 export default AnimeService

@@ -1,5 +1,6 @@
 import * as React from "react";
 import {
+    AlertColor,
     Box,
     Button,
     Dialog,
@@ -8,38 +9,26 @@ import {
     DialogContentText,
     DialogTitle,
     Tab,
-    TableBodyProps,
-    Tabs,
     TextField
 } from "@mui/material";
 import * as colors from "@mui/material/colors";
-import {createTheme, ThemeProvider} from '@mui/material/styles';
 import {IAnime, TabComponent, TabProps} from "../../../types/types";
 import {BookmarkRow, TabResult} from "../../../components/Menu/Menu-Body.component";
-import HorizonatalTabPanelComponent from "./horizonatal-tab-panel.component";
+import UserListTabPanelComponent from "./user-list-tab-panel.component";
 import AutoStoriesIcon from "@mui/icons-material/AutoStories";
 import TableComponent from "../../table/table.component";
 import AddIcon from "@mui/icons-material/Add";
 import UserListService from "../../../sevices/user_list.services";
 import {finalize} from "rxjs";
-import animeServices from "../../../sevices/anime.services";
-
-
-const theme = createTheme({
-    palette: {
-        primary: {
-            main: colors.lightBlue[900]
-        },
-        secondary: {
-            main: colors.deepPurple[900]
-        },
-    }
-});
+import CustomAlert from "../../alert/CustomAlert";
+import {BoxProps} from "@material-ui/core";
+import {getColors, StyledTabs, userListTheme} from "../../styles/styles";
+import {ThemeProvider} from "@mui/material/styles";
 
 function a11yProps(index: number) {
     return {
-        id: `horizontal-tab-${index}`,
-        'aria-controls': `horizontal-tabpanel-${index}`,
+        id: `user-list-tab-${index}`,
+        'aria-controls': `user-list-tab-panel-${index}`,
     };
 }
 
@@ -52,7 +41,7 @@ function a11yProps(index: number) {
  * @property {Array<BookmarkRow>} bookmarks - `Bookmarks with anime`
  * @property {string} type - `Type Panel`
  */
-export interface HorizontalTab extends TableBodyProps {
+export interface UserListTab extends BoxProps {
     bookmarks: string[];
     type: 'admin' | 'user' | string;
     UserList: UserListRow;
@@ -62,17 +51,23 @@ interface UserListRow{
     [index: string]: any[]
 }
 
-export default class HorizontalTabsComponent extends React.Component<HorizontalTab,
-    { value: number, open: boolean, name: string, bookmarks: string[], current_list: string, anime: IAnime[] }> {
+export default class UserListTabComponent extends React.Component<UserListTab,
+    {
+        value: number, open: boolean, name: string, bookmarks: string[], current_list: string, anime: IAnime[],
+        alert: boolean, response: AlertColor, message: string
+    }> {
     data = new FormData()
     lists: string[] = []
     anime: IAnime[] = []
     color = colors.teal[900]
     user_list: UserListRow = {};
 
-    constructor(props: HorizontalTab) {
+    constructor(props: UserListTab) {
         super(props);
-        this.state = {value: 0, open: false, name: '', current_list: '', anime: [], bookmarks: []}
+        this.state = {
+            value: 0, open: false, name: '', current_list: '', anime: [], bookmarks: [],
+            alert: false, response: 'success', message: ''
+        }
         this.handleChange = this.handleChange.bind(this)
         this.handleClickOpen = this.handleClickOpen.bind(this)
         this.handleClose = this.handleClose.bind(this)
@@ -95,7 +90,14 @@ export default class HorizontalTabsComponent extends React.Component<HorizontalT
                 this.setState({open: false})
                 this.lists.push(this.state.name)
             }))
-            .subscribe(() => {})
+            .subscribe((response) => {
+                switch (response.status) {
+                    case 200: {
+                        this.setState({open: false, response: "success", message: response.statusText, alert: true})
+                        this.lists.push(this.state.name)
+                    }
+                }
+            })
 
     }
 
@@ -107,14 +109,12 @@ export default class HorizontalTabsComponent extends React.Component<HorizontalT
                 break;
             }
         }
-        console.log(e.currentTarget.name)
     }
 
-    componentDidUpdate(prevProps: Readonly<HorizontalTab>,
+    componentDidUpdate(prevProps: Readonly<UserListTab>,
                        prevState: Readonly<{ value: number; open: boolean; name: string; bookmarks: string[]; current_list: string; anime: IAnime[] }>,
                        snapshot?: any) {
         if (prevState.current_list !== this.state.current_list){
-            console.log('Update List')
             this.setState({anime: this.props.UserList[this.state.current_list]})
         }
     }
@@ -132,20 +132,13 @@ export default class HorizontalTabsComponent extends React.Component<HorizontalT
             <Box
                 sx={this.props.sx}
             >
-                <ThemeProvider theme={theme}>
-                    <Tabs
+                <ThemeProvider theme={userListTheme}>
+                    <StyledTabs
                         orientation="horizontal"
                         value={this.state.value}
                         onChange={this.handleChange}
-                        // variant="scrollable"
-                        centered={true}
-                        sx={{
-                            borderRight: 2, borderColor: 'divider', color: this.color,
-                            background: `transparent`, width: 'fullwidth',
-                            borderRadius: 10
-                        }}
-                        textColor="primary"
-                        indicatorColor="secondary"
+                        variant="scrollable"
+                        scrollButtons={'auto'}
                     >
                         {this.props.bookmarks.map((name, index) =>
                             <Tab icon={<AutoStoriesIcon/>} iconPosition={"start"} label={name}
@@ -153,22 +146,23 @@ export default class HorizontalTabsComponent extends React.Component<HorizontalT
                                  aria-label={name} {...a11yProps(index)}/>
                         )}
                         <Tab icon={<AddIcon/>} label={'Add New'} sx={{fontFamily: ['Consolas'], borderRadius: 20}}
-                             key={this.state.bookmarks.length}
+                             key={this.state.bookmarks.length} iconPosition={'start'}
                              aria-label={'Add New'} {...a11yProps(this.state.bookmarks.length)}
                              onClick={this.handleClickOpen}/>
-                    </Tabs>
+                    </StyledTabs>
                 </ThemeProvider>
                 {this.props.bookmarks.map((name, index) =>
-                    <HorizonatalTabPanelComponent index={index} value={this.state.value} key={index}>
-                        <TableComponent list_name={name} key={index} type={'user_list'}
+                    <UserListTabPanelComponent index={index} value={this.state.value} key={index}>
+                        <TableComponent list_name={name} key={index} type={'user'}
                                         columns={['Image', 'Name', 'Quality', 'Episodes', 'Rating',
                                             'Subscribe']}
-                                        rows={this.props.UserList[name]}/>
-                    </HorizonatalTabPanelComponent>
+                                        rows={this.props.UserList[name]} lists={[]}
+                                        actions={[]}/>
+                    </UserListTabPanelComponent>
                 )}
-                <HorizonatalTabPanelComponent index={this.state.bookmarks.length} value={this.lists.length}
-                                              key={this.state.bookmarks.length}>
-                    <Dialog open={this.state.open} onClose={this.handleClose}>
+                <UserListTabPanelComponent index={this.state.bookmarks.length} value={this.lists.length}
+                                           key={this.state.bookmarks.length}>
+                    <Dialog open={this.state.open} onClose={()=>this.setState({open: false})}>
                         <DialogTitle>Subscribe</DialogTitle>
                         <DialogContent>
                             <DialogContentText>
@@ -187,11 +181,13 @@ export default class HorizontalTabsComponent extends React.Component<HorizontalT
                             />
                         </DialogContent>
                         <DialogActions>
-                            <Button onClick={this.handleClose}>Close</Button>
+                            <Button onClick={()=>this.setState({open: false})}>Close</Button>
                             <Button onClick={this.handleClose}>Add</Button>
                         </DialogActions>
                     </Dialog>
-                </HorizonatalTabPanelComponent>
+                </UserListTabPanelComponent>
+                <CustomAlert message={this.state.message} open={this.state.alert}
+                             onClose={() => this.setState({alert: false})}/>
             </Box>
         );
     }
@@ -281,18 +277,18 @@ export default class HorizontalTabsComponent extends React.Component<HorizontalT
 //                 </Tabs>
 //             </ThemeProvider>
 //             {props.type === 'user' ? props.lists.map((name, index) =>
-//                 <HorizonatalTabPanelComponent index={index} value={value} key={index}>
+//                 <AdministrationTabPanelComponent index={index} value={value} key={index}>
 //                     <TableComponent list_name={name} key={index}
 //                                        columns={['Image', 'Name', 'Quality', 'Episodes',
 //                                            'Release_date', 'Rating', 'Time', 'Country']}
 //                                        rows={props.bookmarks} lists={props.lists}/>
-//                 </HorizonatalTabPanelComponent>
+//                 </AdministrationTabPanelComponent>
 //             ) : props.type === 'admin' ? props.lists.map((name, index) =>
 //                 <TableComponent list_name={name} key={index}
 //                                    columns={['Image', 'Name', 'Quality', 'Episodes',
 //                                        'Release_date', 'Rating', 'Time', 'Country']}
 //                                    rows={props.bookmarks} lists={props.lists}/>) : <React.Fragment/>}
-//             <HorizonatalTabPanelComponent index={props.lists.length} value={props.lists.length}
+//             <AdministrationTabPanelComponent index={props.lists.length} value={props.lists.length}
 //                                           key={props.lists.length}>
 //                 <Dialog open={open} onClose={handleClose}>
 //                     <DialogTitle>Subscribe</DialogTitle>
@@ -317,7 +313,7 @@ export default class HorizontalTabsComponent extends React.Component<HorizontalT
 //                         <Button onClick={handleClose}>Add</Button>
 //                     </DialogActions>
 //                 </Dialog>
-//             </HorizonatalTabPanelComponent>
+//             </AdministrationTabPanelComponent>
 //         </Box>
 //     );
 // }

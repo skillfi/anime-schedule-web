@@ -2,15 +2,13 @@ import * as React from 'react';
 import TableComponent from "../../ui/table/table.component";
 import {Episode, IAnime} from "../../types/types";
 import AnimeServices from "../../sevices/anime.services";
+import animeServices from "../../sevices/anime.services";
 import {finalize} from "rxjs";
 import UserListService from "../../sevices/user_list.services";
-import GenerateAnimeButtonComponent from "../../ui/buttons/generate-anime-button.component";
-import Typography from "@mui/material/Typography";
-import AnimeService from "../../sevices/anime.services";
-import animeServices from "../../sevices/anime.services";
+import {TableProps} from "@material-ui/core";
 
 
-interface AnimeListProps{
+interface AnimeListProps extends TableProps {
     user_lists: string[]
     rows: IAnime[]
 }
@@ -71,23 +69,13 @@ episodes: Episodes[]}>{
 
     render() {
         return (
-            <React.Fragment>
-                <Typography
-                    variant="h4"
-                    noWrap
-                    component="h4"
-                >
-                    {' Anime List'}
-                    <GenerateAnimeButtonComponent sx={{left: '80%'}} size={'medium'}/>
-                </Typography>
-                <TableComponent list_name={'All'} type={'anime_list'}
-                                columns={['Image', 'Name', 'Quality', 'Episodes', 'Rating',
-                                    'Subscribe', 'Bookmarks', 'Actions']}
-                                key={0}
-                                rows={this.state.rows}
-                                episodes={this.state.episodes}
-                lists={this.state.all}/>
-            </React.Fragment>
+            <TableComponent list_name={'All'} type={'anime_list'}
+                            columns={['Image', 'Name', 'Quality', 'Episodes', 'Rating',
+                                'Subscribe', 'Bookmarks', 'Actions']}
+                            key={0}
+                            rows={this.state.rows}
+                            episodes={this.state.episodes}
+                            lists={this.state.all} actions={['refresh', 'update', 'navigate']}/>
         );
     }
 }

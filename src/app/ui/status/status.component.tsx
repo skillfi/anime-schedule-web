@@ -10,13 +10,14 @@ import {StyledChip} from "../styles/styles";
  */
 interface StatusProps {
     status: string;
+    quality: number;
 }
 
 /** Status Component
  *
  */
 const StatusComponent = React.memo((props: StatusProps) => {
-    const {status} = props;
+    const {status, quality} = props;
 
     let icon: any = null;
     if (status === 'Low') {
@@ -35,7 +36,7 @@ const StatusComponent = React.memo((props: StatusProps) => {
     }
 
     return (
-        <StyledChip className={status} icon={icon} size="small" label={label} variant="outlined"/>
+        <StyledChip className={status} icon={icon} label={quality} variant="outlined" size={'medium'}/>
     );
 });
 
