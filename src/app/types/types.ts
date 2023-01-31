@@ -1,4 +1,5 @@
 import React from "react";
+import {ISetting} from "../components/Menu/Menu.component";
 
 /** ObjectId preview
  * @property {string} $oid - `Object Id`
@@ -111,18 +112,7 @@ export interface IAnime {
     tag: string[]
 }
 
-export interface ISetting {
-    icon: React.ReactNode | JSX.Element;
-    text: string;
-    link: string;
-}
 
-export interface MenuListProps<T> {
-    items: T[];
-    renderItems: (item: T) => JSX.Element;
-    anchorElUser: HTMLElement | null;
-    handleCloseUserMenu: (event: Object) => void;
-}
 
 export interface MenuItemProps {
     setting: ISetting;

@@ -63,9 +63,8 @@ export default class Row<T> extends React.Component<RowProps<T>,
                                                 all_lists={this.props.lists} actions={[]}/>
                     <TableCellAnimeComponent cell={this.props.cell} cellName={'episodes'} align={'center'}
                                                 list_name={''} all_lists={this.props.lists} buttons={
-                        <IconButton onClick={this.onOpen}>
-                            <ConfirmationNumberIcon/>
-                            {/*{this.state.episode.length} / {this.props.anime?.episodes}*/}
+                        <IconButton onClick={this.onOpen} size={'small'} sx={{fontFamily: 'Consolas', fontSize: 15}}>
+                            <ConfirmationNumberIcon/> {this.props.cell.episode.length} / {this.props.cell.episodes}
                         </IconButton>
                     } actions={[]}/>
                     <TableCellAnimeComponent cell={this.props.cell} cellName={'rating'} align={'center'} list_name={''}

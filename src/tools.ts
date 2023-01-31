@@ -128,4 +128,11 @@ export class Tools {
 
         return formData;
     }
+
+    static getWindowDimension(){
+        const {innerHeight: height, innerWidth: width, outerHeight: minHeight, outerWidth: minWidth} = window
+        return {
+            height, width, minWidth, minHeight
+        }
+    }
 }

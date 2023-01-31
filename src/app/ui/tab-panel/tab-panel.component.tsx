@@ -21,7 +21,7 @@ export default function TabPanelFC(props: TabPanelProps){
             key={index}
             {...other}>
             {value === index && (
-                <Box sx={{p:1}}>
+                <Box sx={{p:0}}>
                     {children}
                 </Box>
             )}

@@ -13,7 +13,6 @@ import {
 } from "@mui/material";
 import * as colors from "@mui/material/colors";
 import {IAnime, TabComponent, TabProps} from "../../../types/types";
-import {BookmarkRow, TabResult} from "../../../components/Menu/Menu-Body.component";
 import UserListTabPanelComponent from "./user-list-tab-panel.component";
 import AutoStoriesIcon from "@mui/icons-material/AutoStories";
 import TableComponent from "../../table/table.component";
@@ -22,8 +21,9 @@ import UserListService from "../../../sevices/user_list.services";
 import {finalize} from "rxjs";
 import CustomAlert from "../../alert/CustomAlert";
 import {BoxProps} from "@material-ui/core";
-import {getColors, StyledTabs, userListTheme} from "../../styles/styles";
+import {StyledTabs, userListTheme} from "../../styles/styles";
 import {ThemeProvider} from "@mui/material/styles";
+import {Tools} from "../../../../tools";
 
 function a11yProps(index: number) {
     return {
@@ -47,7 +47,7 @@ export interface UserListTab extends BoxProps {
     UserList: UserListRow;
 }
 
-interface UserListRow{
+interface UserListRow {
     [index: string]: any[]
 }
 
@@ -114,7 +114,7 @@ export default class UserListTabComponent extends React.Component<UserListTab,
     componentDidUpdate(prevProps: Readonly<UserListTab>,
                        prevState: Readonly<{ value: number; open: boolean; name: string; bookmarks: string[]; current_list: string; anime: IAnime[] }>,
                        snapshot?: any) {
-        if (prevState.current_list !== this.state.current_list){
+        if (prevState.current_list !== this.state.current_list) {
             this.setState({anime: this.props.UserList[this.state.current_list]})
         }
     }
@@ -139,6 +139,9 @@ export default class UserListTabComponent extends React.Component<UserListTab,
                         onChange={this.handleChange}
                         variant="scrollable"
                         scrollButtons={'auto'}
+                        sx = {{
+                            mt: 10, width: Tools.getWindowDimension().minWidth * 0.9
+                        }}
                     >
                         {this.props.bookmarks.map((name, index) =>
                             <Tab icon={<AutoStoriesIcon/>} iconPosition={"start"} label={name}
@@ -162,7 +165,7 @@ export default class UserListTabComponent extends React.Component<UserListTab,
                 )}
                 <UserListTabPanelComponent index={this.state.bookmarks.length} value={this.lists.length}
                                            key={this.state.bookmarks.length}>
-                    <Dialog open={this.state.open} onClose={()=>this.setState({open: false})}>
+                    <Dialog open={this.state.open} onClose={() => this.setState({open: false})}>
                         <DialogTitle>Subscribe</DialogTitle>
                         <DialogContent>
                             <DialogContentText>
@@ -181,7 +184,7 @@ export default class UserListTabComponent extends React.Component<UserListTab,
                             />
                         </DialogContent>
                         <DialogActions>
-                            <Button onClick={()=>this.setState({open: false})}>Close</Button>
+                            <Button onClick={() => this.setState({open: false})}>Close</Button>
                             <Button onClick={this.handleClose}>Add</Button>
                         </DialogActions>
                     </Dialog>

@@ -4,20 +4,24 @@ import HMobiledataIcon from "@mui/icons-material/HMobiledata";
 import HdIcon from "@mui/icons-material/Hd";
 import HdrOnIcon from "@mui/icons-material/HdrOn";
 import {StyledChip} from "../styles/styles";
+import {OverridableStringUnion} from "@mui/types";
+import {ChipPropsSizeOverrides} from "@mui/material/Chip/Chip";
+import {ChipProps} from "@material-ui/core";
 
 /** Anime Status Quality
  * @property {string, 'Low', 'Normal', 'HD', 'HDR'} status - `Anime Quality`
  */
-interface StatusProps {
+interface StatusProps extends ChipProps{
     status: string;
     quality: number;
+    size?: OverridableStringUnion<'small' | 'medium', ChipPropsSizeOverrides>;
 }
 
 /** Status Component
  *
  */
 const StatusComponent = React.memo((props: StatusProps) => {
-    const {status, quality} = props;
+    const {status, quality, size} = props;
 
     let icon: any = null;
     if (status === 'Low') {
@@ -36,7 +40,7 @@ const StatusComponent = React.memo((props: StatusProps) => {
     }
 
     return (
-        <StyledChip className={status} icon={icon} label={quality} variant="outlined" size={'medium'}/>
+        <StyledChip className={status} icon={icon} label={quality} variant="outlined" size={size}/>
     );
 });
 

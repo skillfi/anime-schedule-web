@@ -1,16 +1,11 @@
 /// <reference types="react-scripts" />
 
-const backendURL = getURL(false)
+const backendURL = getURL()
 const host = document.location.protocol + '//' + document.location.host
 
 
-function getURL(local: boolean){
-    if (local){
-        return 'http://localhost:8080';
-    }
-    else {
-        return 'https://anime-schedule.azurewebsites.net'
-    }
+function getURL(){
+    return 'http://localhost:8080';
 
 }
 

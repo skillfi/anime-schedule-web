@@ -14,13 +14,14 @@ import UserListService from "../../sevices/user_list.services";
 import {finalize} from "rxjs";
 import AnimeServices from "../../sevices/anime.services";
 import CustomAlert from "../alert/CustomAlert";
+import {ColorRing} from "react-loader-spinner";
 
 export default class GenerateAnimeButtonComponent extends React.Component<ButtonProps, {url: string,
-    open: boolean, alert: boolean, severity: AlertColor, message: string}>{
+    open: boolean, alert: boolean, severity: AlertColor, message: string, visible: boolean}>{
 
     constructor(props: ButtonProps) {
         super(props);
-        this.state = {url: '', open: false, alert: false, severity: 'success', message: ''}
+        this.state = {url: '', open: false, alert: false, severity: 'success', message: '', visible: false}
         this.handleClose = this.handleClose.bind(this)
         this.handleAdd = this.handleAdd.bind(this)
         this.onChange = this.onChange.bind(this)
@@ -29,7 +30,13 @@ export default class GenerateAnimeButtonComponent extends React.Component<Button
     data = new FormData()
     handleAdd() {
         this.data.append('url', this.state.url)
+        this.setState({visible: true})
         AnimeServices.generateAnime(this.data)
+            .pipe(finalize(()=> {
+                this.setState({visible: false})
+                // eslint-disable-next-line no-restricted-globals
+                location.reload()
+            }))
             .subscribe((response)=>{
                 switch (response.status) {
                     case 200: {
@@ -96,6 +103,7 @@ export default class GenerateAnimeButtonComponent extends React.Component<Button
                     location.reload()
                     this.setState({alert: false})
                 }}/>
+                <ColorRing visible={this.state.visible} height={80} width={80} ariaLabel={"blocks-loading"}/>
             </React.Fragment>
 
         );

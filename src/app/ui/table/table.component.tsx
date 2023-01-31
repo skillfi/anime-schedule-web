@@ -5,7 +5,7 @@ import TableBodyComponent from "./table-body/table-body.component";
 import {IAnime} from "../../types/types";
 import {Episodes} from "../../components/anime-list/anime-list.component";
 import Row from "./collapse/collapse-box/collapse-table-cell.component";
-import {getWindowDimensions} from "../navbar/navbar.component";
+import {Tools} from "../../../tools";
 
 /** User List Props
  * @property {string} list_name - `User List Name`
@@ -34,7 +34,7 @@ interface UserListProps extends TableBodyProps {
  */
 export default class TableComponent extends React.Component<UserListProps,
     { page: number, rowsPerPage: number, book: IAnime[], lists: string[], anime: IAnime[], open: boolean,
-        windowDimensions: ReturnType<typeof getWindowDimensions>}> {
+        windowDimensions: ReturnType<typeof Tools.getWindowDimension>}> {
     lists: string[] = []
     book: IAnime[] = []
     anime: IAnime[] = []
@@ -43,7 +43,7 @@ export default class TableComponent extends React.Component<UserListProps,
     constructor(props: UserListProps) {
         super(props);
         this.state = {page: 0, rowsPerPage: 5, book: [], anime: [], lists: [], open: false,
-            windowDimensions: getWindowDimensions()}
+            windowDimensions: Tools.getWindowDimension()}
         this.handleChangePage = this.handleChangePage.bind(this)
         this.handleChangeRowsPerPage = this.handleChangeRowsPerPage.bind(this)
         this.handleResize = this.handleResize.bind(this)
@@ -63,21 +63,17 @@ export default class TableComponent extends React.Component<UserListProps,
     }
 
     handleResize(){
-        this.setState({windowDimensions: getWindowDimensions()})
+        this.setState({windowDimensions: Tools.getWindowDimension()})
     }
 
-    componentDidUpdate(prevProps: Readonly<UserListProps>,
-                       prevState: Readonly<{ page: number; rowsPerPage: number; book: IAnime[]; lists: string[];
-        anime: IAnime[]; open: boolean; windowDimensions: ReturnType<typeof getWindowDimensions> }>, snapshot?: any) {
-        window.addEventListener('click', this.handleResize)
-        return () => window.removeEventListener('click', this.handleResize)
-
+    componentDidMount() {
+        this.handleResize()
     }
 
     render() {
         return (
-            <Paper sx={{width: this.state.windowDimensions.minWidth * 0.8, overflow: 'hidden'}}>
-                <TableContainer sx={{minWidth: this.state.windowDimensions.minWidth * 0.8}}>
+            <Paper sx={{overflow: 'hidden', position: 'static'}}>
+                <TableContainer sx={{width: this.state.windowDimensions.minWidth * 0.9}}>
                     <Table aria-label={"mui table"} size={"small"} align={'center'}>
                         <TableHeadComponent columns={this.props.columns}/>
                         <TableBodyComponent rows={this.props.rows} page={this.state.page}

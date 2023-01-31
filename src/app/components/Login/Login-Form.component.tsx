@@ -9,6 +9,8 @@ import {Button, FormControl, FormLabel, Input, Sheet, Typography} from '@mui/joy
 import PasswordIcon from "@mui/icons-material/Password";
 import EmailIcon from '@mui/icons-material/Email';
 import LocalActivityIcon from '@mui/icons-material/LocalActivity';
+import {Tools} from "../../../tools";
+import { finalize } from "rxjs";
 
 
 interface IProps extends BoxProps {
@@ -45,17 +47,15 @@ const LoginFormComponent: React.FC<IProps> = ({submit}) => {
 
         // Do something
         loginService.logIn(formData)
+            .pipe(finalize(() => {
+                setSeverity('success')
+                setOpen(true)
+                navigate('/menu')
+            }))
             .subscribe((response) => {
                 // console.log(response)
                 sessionService.setCurrentUser(response.data.data.user)
                 sessionService.setToken(response.data.data.auth_token)
-            }, (error) => {
-                setSeverity('error')
-                setOpen(true)
-            }, () => {
-                setSeverity('success')
-                setOpen(true)
-                navigate('/menu')
             })
     }
 
@@ -78,8 +78,8 @@ const LoginFormComponent: React.FC<IProps> = ({submit}) => {
     return (
         <Sheet
             sx={{
-                width: 500,
-                my: window.innerHeight % 50,
+                width: 250,
+                my: 10,
                 mx: 'auto',
                 py: 3, // padding top & bottom
                 px: 2, // padding left & right
@@ -97,7 +97,7 @@ const LoginFormComponent: React.FC<IProps> = ({submit}) => {
                 </Typography>
                 <Typography level="body2">Sign in to continue.</Typography>
             </div>
-            <FormControl>
+            <FormControl sx={{maxWidth: Tools.getWindowDimension().minWidth}}>
                 <FormLabel>Email</FormLabel>
                 <Input
                     // html input attribute
@@ -108,7 +108,7 @@ const LoginFormComponent: React.FC<IProps> = ({submit}) => {
                     startDecorator={<EmailIcon/>}
                 />
             </FormControl>
-            <FormControl>
+            <FormControl sx={{maxWidth: Tools.getWindowDimension().minWidth}}>
                 <FormLabel>Password</FormLabel>
                 <Input
                     // html input attribute

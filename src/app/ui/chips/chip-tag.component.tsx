@@ -4,8 +4,11 @@ import {createTheme, ThemeProvider, styled} from "@mui/material/styles";
 import {Chip} from "@mui/material";
 import {orange, red} from "@mui/material/colors";
 import {getColors} from "../styles/styles";
+import {SxProps} from "@mui/system/styleFunctionSx";
+import {Theme} from "@mui/material";
 interface ChipProps{
     tag: string;
+    sx?: SxProps<Theme>;
 }
 
 const outerTheme = createTheme({
@@ -19,11 +22,8 @@ const outerTheme = createTheme({
 const TagChip = styled(Chip)(({theme})=> ({
     ':hover': {
         color: getColors('blue', 500),
-        fontSize: 15
     },
     color: getColors('orange', 600),
-    fontFamily: 'Cambria Math',
-    fontSize: 18,
     borderColor: getColors('red', 500),
     cursor: 'help'
 }))
@@ -34,5 +34,14 @@ export default function ChipTagComponent(props: ChipProps) {
 
     return (
         <TagChip label={tag} variant={"outlined"}/>
+    )
+}
+
+export function ChipTagMobileComponent(props: ChipProps) {
+    const {tag, sx} = props
+    const navigate = useNavigate();
+
+    return (
+        <TagChip label={tag} variant={"outlined"} sx={sx} size={'small'}/>
     )
 }

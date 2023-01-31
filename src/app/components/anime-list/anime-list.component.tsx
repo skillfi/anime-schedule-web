@@ -6,11 +6,13 @@ import animeServices from "../../sevices/anime.services";
 import {finalize} from "rxjs";
 import UserListService from "../../sevices/user_list.services";
 import {TableProps} from "@material-ui/core";
+import {DrawerHeader, Main} from "../../ui/styles/styles";
 
 
 interface AnimeListProps extends TableProps {
     user_lists: string[]
-    rows: IAnime[]
+    rows: IAnime[];
+    open: boolean
 }
 
 export interface Episodes{
@@ -69,13 +71,16 @@ episodes: Episodes[]}>{
 
     render() {
         return (
-            <TableComponent list_name={'All'} type={'anime_list'}
-                            columns={['Image', 'Name', 'Quality', 'Episodes', 'Rating',
-                                'Subscribe', 'Bookmarks', 'Actions']}
-                            key={0}
-                            rows={this.state.rows}
-                            episodes={this.state.episodes}
-                            lists={this.state.all} actions={['refresh', 'update', 'navigate']}/>
+            <Main open={this.props.open} >
+                <DrawerHeader/>
+                <TableComponent list_name={'All'} type={'anime_list'}
+                                columns={['Image', 'Name', 'Quality', 'Episodes', 'Rating',
+                                    'Subscribe', 'Bookmarks', 'Actions']}
+                                key={0}
+                                rows={this.state.rows}
+                                episodes={this.state.episodes}
+                                lists={this.state.all} actions={['refresh', 'update', 'navigate']}/>
+            </Main>
         );
     }
 }

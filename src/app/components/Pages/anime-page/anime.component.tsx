@@ -11,7 +11,7 @@ import TableEpisodeComponent from "../../../ui/table/table-episode.component";
 import {renderTags} from "../../../ui/table/table-cell/table-cell-anime.component";
 import ChipTagComponent from "../../../ui/chips/chip-tag.component";
 
-const Item = styled(Paper)(({theme}) => ({
+export const Item = styled(Paper)(({theme}) => ({
     backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
     ...theme.typography.body2,
     padding: theme.spacing(1),
@@ -106,8 +106,8 @@ export default class AnimeComponent extends React.Component<PageProps, { anime: 
             tags.push(<ChipTagComponent tag={tag} key={index}/>)
         })
         return (
-            <Container>
-                <Box sx={{mt: 5}}>
+            <Box>
+                <Box sx={{mt: 10}}>
                     <Grid container spacing={2}>
                         <Grid item={true} xs>
                             <Box sx={{textAlign: 'center'}}>
@@ -196,9 +196,8 @@ export default class AnimeComponent extends React.Component<PageProps, { anime: 
                                                columns={['Episode_Id', 'Air_Date', 'Title', 'Full_Title', 'Viewed']}
                                                sx={{minWidth: 500}}/>
                     </Grid>
-
                 </Box>
-            </Container>
+            </Box>
         );
     }
 }

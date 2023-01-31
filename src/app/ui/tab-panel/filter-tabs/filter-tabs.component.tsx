@@ -13,7 +13,6 @@ import {
 } from "@mui/material";
 import * as colors from "@mui/material/colors";
 import {IAnime, TabComponent, TabProps} from "../../../types/types";
-import {BookmarkRow, TabResult} from "../../../components/Menu/Menu-Body.component";
 import FilterTabPanelComponent from "./filter-tab-panel.component";
 import AutoStoriesIcon from "@mui/icons-material/AutoStories";
 import TableComponent from "../../table/table.component";

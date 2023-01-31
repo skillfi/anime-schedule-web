@@ -2,11 +2,12 @@ import * as React from "react";
 import AnimeServices from "../../sevices/anime.services";
 import {finalize} from "rxjs";
 import AdministrationTabComponent from "../../ui/tab-panel/administration-tabs/administration-tabs.component";
+import {Main} from "../../ui/styles/styles";
 
 interface UserListRow{
     [index: string]: any[]
 }
-export default class AdminListComponent extends React.Component<any, {bookmarks: string[], rows: any[],
+export default class AdminListComponent extends React.Component<{open: boolean}, {bookmarks: string[], rows: any[],
 AdminList: UserListRow}>{
 
     constructor(props: any) {
@@ -32,13 +33,13 @@ AdminList: UserListRow}>{
 
     render() {
         return (
-            <React.Fragment>
-                <AdministrationTabComponent key={2}
-                                            type={'admin'}
-                                            sx={{borderBottom: 1, borderColor: 'divider', width: '100%'}}
+            <Main open={this.props.open}>
+                <AdministrationTabComponent key={3}
+                                            type={'user'}
+                                            sx={{borderBottom: 1, borderColor: 'divider'}}
                                             bookmarks={this.state.bookmarks}
                                             UserList={this.state.AdminList}/>
-            </React.Fragment>
+            </Main>
         );
     }
 }

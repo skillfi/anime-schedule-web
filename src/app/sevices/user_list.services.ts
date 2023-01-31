@@ -8,21 +8,28 @@ import {
     UserBookmarkResponse,
     UserBookmarks
 } from "../types/types";
+import {config} from "./login.service";
+import {Url} from "../../url";
+import sessionService from "./session.service";
 
 function getMyList(list_name: string){
-    return from(http.get<{ data: IUsersList }>('/users-list/me', {
+    const request = http.get<{ data: IUsersList }>('/users-list/me', {
         params: {
             list_name: list_name
-        }
-    }))
+        },
+        headers: config?.headers
+    })
+    return from(request)
 }
 
 function getMyBookmarks(){
-    return from(http.get<UserBookmarkResponse>('/users-bookmarks/me'))
+    const request = http.get<UserBookmarkResponse>(new Url('/users-bookmarks/me').path, config)
+    return from(request)
 }
 
 function getAllMyLists(){
-    return from(http.get<{ data: IUsersList[] }>('/users-list/me'))
+    const request =  http.get<{ data: IUsersList[] }>(new Url('/users-list/me').path, config)
+    return from(request)
 }
 
 function getAll(){
@@ -30,21 +37,25 @@ function getAll(){
 }
 
 function updateMyList(data: Object){
-    return from(http.put<{ data: IAnime }>('/users-list/me', data, {
-        headers: {'Content-type': 'application/json'}
-    }))
+    const request =  http.put<{ data: IAnime }>(new Url('/users-list/me').path, data, {
+        headers: {'Content-type': 'application/json', 'Authorization': `Bearer: ${sessionService.getToken()}`}
+    })
+    return from(request)
 }
 
-function removeFromMyList(data: FormData){
-    return from(http.delete('/users-list/me'))
+function removeFromMyList(){
+    const request =  http.delete(new Url('/users-list/me').path, config)
+    return from(request)
 }
 
 function createNew(data: FormData){
-    return from(http.post<UserBookmark>('/users-list', data))
+    const request = http.post<UserBookmark>(new Url('/users-list').path, data, config)
+    return from(request)
 }
 
 function get_lists_names(anime_id: string) {
-    return from(http.get<UserBookmarks>(`/users-list/anime/${anime_id}/me`))
+    const request =http.get<UserBookmarks>(new Url('/users-list/anime/', anime_id + '/me').path, config)
+    return from(request)
 }
 
 const UserListService = {

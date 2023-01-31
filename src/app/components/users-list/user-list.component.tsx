@@ -4,10 +4,12 @@ import UserListService from "../../sevices/user_list.services";
 import {finalize} from "rxjs";
 import {IAnime} from "../../types/types";
 import * as colors from "@mui/material/colors";
-import {getWindowDimensions} from "../../ui/navbar/navbar.component";
+import {Tools} from "../../../tools";
+import {Main} from "../../ui/styles/styles";
 
 interface UserListProps{
     user_lists: string[]
+    open: boolean;
 }
 
 interface UserListRow{
@@ -57,13 +59,13 @@ export default class UserListComponent extends React.Component<UserListProps,
 
     render() {
         return (
-            <React.Fragment>
+            <Main open={this.props.open}>
                 <UserListTabComponent key={1}
                                       type={"user"}
                                       sx={{borderBottom: 1, borderColor: 'divider'}}
                                       bookmarks={this.state.bookmarks}
                                       UserList={this.state.UserList}/>
-            </React.Fragment>
+            </Main>
         );
     }
 }

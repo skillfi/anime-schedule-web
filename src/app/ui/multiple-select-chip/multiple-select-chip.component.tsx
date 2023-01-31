@@ -21,8 +21,8 @@ const ITEM_PADDING_TOP = 8;
 const MenuProps = {
     PaperProps: {
         style: {
-            maxHeight: ITEM_HEIGHT * 2 + ITEM_PADDING_TOP,
-            width: 50,
+            maxHeight: 50,
+            width: 25,
         },
     },
 };
@@ -77,7 +77,7 @@ all: string[], anime: IAnime}>{
 
     render() {
         return (
-            <FormControl sx={{ m: 1, width: 'max-content', minWidth: 100 }}>
+            <FormControl sx={{ width: 'max-content', minWidth: 100 }}>
                 <InputLabel id="demo-multiple-chip-label">BookMark</InputLabel>
                 <Select
                     labelId="demo-multiple-chip-label"
@@ -87,9 +87,9 @@ all: string[], anime: IAnime}>{
                     onChange={this.handleChange}
                     input={<OutlinedInput id="select-multiple-chip" label="Chip" />}
                     renderValue={(selected) => (
-                        <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
+                        <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.2 }}>
                             {selected.map((value) => (
-                                <Chip key={value} label={value} />
+                                <Chip key={value} label={value} size={'small'} variant={'outlined'}/>
                             ))}
                         </Box>
                     )}
@@ -99,6 +99,7 @@ all: string[], anime: IAnime}>{
                         <Menu
                             key={book}
                             value={book}
+                            sx={{bgcolor: 'transparent', fontSize: 10}}
                         >
                             {book}
                         </Menu>

@@ -10,6 +10,7 @@ import UpdateImageAnimeButtonComponent from "../../buttons/update-image-anime-bu
 import DeleteAnimeButtonComponent from "../../buttons/delete-anime-button.component";
 import OpenAnimePageButtonComponent from "../../buttons/open-anime-page-button.component";
 import {IAnime} from "../../../types/types";
+import {Tools} from "../../../../tools";
 
 /** Table Cell Props
  * @property {string} id - `Anime id To Render`
@@ -45,32 +46,30 @@ function render(object: IAnime, name: string, lists: string[], actions: string[]
         case 'quality': {
             switch (object[name]) {
                 case 360: {
-                    return <StatusComponent status={'Low'} quality={object[name]}/>
+                    return <StatusComponent status={'Low'} quality={Tools.getProperty(object, name, object[name])}/>
                 }
                 case 480: {
-                    return <StatusComponent status={'Normal'} quality={object[name]}/>
+                    return <StatusComponent status={'Normal'} quality={Tools.getProperty(object, name, object[name])}/>
                 }
                 case 720: {
-                    return <StatusComponent status={'HD'} quality={object[name]}/>
+                    return <StatusComponent status={'HD'} quality={Tools.getProperty(object, name, object[name])}/>
                 }
                 case 1080: {
-                    return <StatusComponent status={'HDR'} quality={object[name]}/>
+                    return <StatusComponent status={'HDR'} quality={Tools.getProperty(object, name, object[name])}/>
                 }
                 default: {
-                    return <StatusComponent status={'Low'} quality={object[name]}/>
+                    return <StatusComponent status={'Low'} quality={Tools.getProperty(object, name, object[name])}/>
                 }
             }
         }
         case 'title_en': {
-            return <IncotermComponent value={object['title']}/>
+            return <IncotermComponent value={Tools.getProperty(object, 'title', object['title'])}/>
         }
         case 'image': {
-            return <Avatar alt={object[name]} src={object[name]}/>
+            return <Avatar alt={object[name]} src={Tools.getProperty(object, name, object[name])}/>
         }
         case 'rating': {
-            return (<div><Rating readOnly={true} value={object[name]/2} size={"small"} sx={{paddingBottom: 2}}/>
-                <code style={{paddingTop: 2}}>{object[name]}</code>
-            </div>)
+            return <Rating readOnly={true} value={Tools.getProperty(object, name, object[name])/2} size={"small"} sx={{paddingBottom: 2}}/>
         }
         case 'title': {
             break;
@@ -79,7 +78,7 @@ function render(object: IAnime, name: string, lists: string[], actions: string[]
             break;
         }
         case 'subscribe': {
-            return <SubscribeComponent value={object[name]} row_id={object['_id']}/>;
+            return <SubscribeComponent value={Tools.getProperty(object, name, object[name])} row_id={object['_id']}/>;
         }
         case 'id': {
             break;
@@ -88,7 +87,7 @@ function render(object: IAnime, name: string, lists: string[], actions: string[]
             break;
         }
         case 'episodes': {
-            return <div>{element} <code>{object['episode'].length} / {object[name]}</code></div>
+            return element
         }
         case 'actions': {
             let elements: JSX.Element[] = []
@@ -117,7 +116,7 @@ function render(object: IAnime, name: string, lists: string[], actions: string[]
             </React.Fragment>
         }
         case 'bookmarks':
-            return <MultipleSelectChipComponent bookmarks={object[name]} all_bookmarks={lists} row_id={object['_id']}/>
+            return <MultipleSelectChipComponent bookmarks={Tools.getProperty(object, name, object[name])} all_bookmarks={lists} row_id={object['_id']}/>
         case 'tag': {
             let tags: JSX.Element[] = []
             object[name].map((tag)=>{
@@ -128,8 +127,7 @@ function render(object: IAnime, name: string, lists: string[], actions: string[]
             </Stack>
         }
         default: {
-            // @ts-ignore
-            return object[name]
+            return Tools.getProperty(object, name)
         }
     }
 }
@@ -138,12 +136,14 @@ export const StyledTableCell = styled(TableCell)(({theme})=>({
     [`&.${tableCellClasses.head}`]: {
         backgroundColor: theme.palette.common.black,
         color: theme.palette.common.white,
-        fontSize: 14,
+        fontSize: 12,
         fontFamily: ['Consolas'],
+        textAlign: 'center'
     },
     [`&.${tableCellClasses.body}`]: {
-        fontSize: 14,
+        fontSize: 12,
         fontFamily: ['Consolas'],
+        textAlign: 'center'
     },
 }))
 
@@ -159,7 +159,7 @@ export default class TableCellAnimeComponent<T> extends React.Component<TableCel
 
     render() {
         return (
-            <StyledTableCell width={'max-content'}>
+            <StyledTableCell sx={{width: 50}}>
                 {render(this.props.cell, this.props.cellName, this.props.all_lists, this.props.actions, this.props.buttons)}
             </StyledTableCell>
         );

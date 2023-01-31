@@ -3,60 +3,73 @@ import {Episode, IAnime} from "../types/types";
 import {environment} from "../../environments/environment";
 import {from} from "rxjs";
 import {Url} from "../../url";
+import {config} from "./login.service";
+
 
 function getAll() {
-    return from(http.get<{ data: IAnime[] }>(environment.apiUrl + '/anime'))
+    const request = http.get<{ data: IAnime[] }>(new Url('/anime').path, config)
+    return from(request)
 }
 
 function getById(id: any) {
-    return from(http.get<{ data: IAnime }>(environment.apiUrl + '/anime/' + id));
+    const request =  http.get<{ data: IAnime }>(new Url('/anime/', id).path, config);
+    return from(request)
 }
 
 async function getByIdAsync(id: string) {
-    return await http.get<{ data: IAnime }>(environment.apiUrl + '/anime/' + id);
+    return await http.get<{ data: IAnime }>(new Url('/anime/', id).path, config);
 }
 
 function create(data: FormData) {
-    return http.post(environment.apiUrl + '/anime', data);
+    return http.post(new Url('/anime').path, data, config);
 }
 
 function update(id: string, data: FormData) {
-    const promise =  http.put('/anime/' + id, data);
+    const promise = http.put(new Url('/anime/', id).path, data, config);
     return from(promise)
 }
 
 function remove(id: string) {
-    return from(http.delete<{data: number}>(environment.apiUrl + '/anime/' + id));
+    const request =  http.delete<{ data: number }>(new Url('/anime/', id).path, config)
+    return from(request)
 }
 
 function generateAnime(data: FormData) {
-    return from(http.post<{ data: IAnime }>(environment.apiUrl + '/anime/generate', data));
+    const request = http.post<{ data: IAnime }>(new Url('/generate/anime').path, data, config)
+    return from(request)
 }
 
-function subscribe(data: FormData){
-    return from(http.post(environment.apiUrl + '/subscribes', data));
+function subscribe(data: FormData) {
+    const request =  http.post(new Url('/subscribes').path, data, config)
+    return from(request)
 }
 
 function unsubscribe(anime_id: string){
-    return from(http.delete(environment.apiUrl + `/subscribe/anime/${anime_id}/me`))
+    const request = http.delete(new Url('/subscribe/anime/', anime_id + '/me').path, config)
+    return from(request)
 }
 
 function getEpisodes(){
-    return from(http.get<{ data: Episode[] }>(new Url('/updates').path))
+    const request =  http.get<{ data: Episode[] }>(new Url('/updates').path, config)
+    return from(request)
 }
 function getEpisodesByAnimeId(anime_id: string){
-    return from(http.get<{ data: Episode[] }>(new Url('/updates/anime/',anime_id).path))
+    const request =  http.get<{ data: Episode[] }>(new Url('/updates/anime/',anime_id).path, config)
+    return from(request)
 }
 
 function viewEpisode(episode_id: string) {
-    return from(http.put<{data: Episode}>(new Url('/anime/view/episode/', episode_id).path))
+    const request = http.put<{data: Episode}>(new Url('/anime/view/episode/', episode_id).path, config)
+    return from(request)
 }
 function un_viewEpisode(episode_id: string) {
-    return from(http.put<{data: Episode}>(new Url('/anime/un-view/episode/', episode_id).path))
+    const request = http.put<{data: Episode}>(new Url('/anime/un-view/episode/', episode_id).path, config)
+    return from(request)
 }
 
 function getEpisode(episode_id: string) {
-    return from(http.get<{data: Episode}>(new Url('/episode/', episode_id).path))
+    const request = http.get<{data: Episode}>(new Url('/episode/', episode_id).path, config)
+    return from(request)
 }
 
  const AnimeService = {

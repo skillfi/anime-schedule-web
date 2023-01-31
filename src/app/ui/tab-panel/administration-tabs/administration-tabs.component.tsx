@@ -1,7 +1,6 @@
 import * as React from "react";
 import {AlertColor, Box, Tab} from "@mui/material";
 import {IAnime, TabComponent, TabProps} from "../../../types/types";
-import {BookmarkRow, TabResult} from "../../../components/Menu/Menu-Body.component";
 import AdministrationTabPanelComponent from "./administration-tab-panel.component";
 import AutoFixHighIcon from '@mui/icons-material/AutoFixHigh';
 import TableComponent from "../../table/table.component";
@@ -15,6 +14,7 @@ import ToggleButton from '@mui/material/ToggleButton';
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 import ViewListIcon from '@mui/icons-material/ViewList';
 import ViewModuleIcon from '@mui/icons-material/ViewModule';
+import {Tools} from "../../../../tools";
 
 function a11yProps(index: number) {
     return {
@@ -144,6 +144,9 @@ export default class AdministrationTabComponent extends React.Component<Administ
                         value={this.state.value}
                         onChange={this.handleChange}
                         variant="scrollable"
+                        sx = {{
+                            mt: 10, width: Tools.getWindowDimension().minWidth * 0.9
+                        }}
                         // centered={true}
                     >
                         {this.props.bookmarks.map((name, index) =>
@@ -155,7 +158,7 @@ export default class AdministrationTabComponent extends React.Component<Administ
                 </ThemeProvider>
                 {this.props.bookmarks.map((name, index) =>
                     <AdministrationTabPanelComponent index={index} value={this.state.value} key={index}>
-                        <TableComponent list_name={name} key={index} type={'admin'}
+                        <TableComponent list_name={name} key={index} type={'user'}
                                         columns={['Image', 'Name', 'Quality', 'Episodes', 'Rating',
                                             'Subscribe', 'Actions']}
                                         rows={this.props.UserList[name]} lists={[]}
