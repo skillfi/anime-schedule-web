@@ -1,0 +1,73 @@
+{
+  "name": "anische",
+  "version": "0.1.0",
+  "private": true,
+  "homepage": "https://skillfi.github.io/anische/#",
+  "proxy": "http://localhost:3000",
+  "dependencies": {
+    "@emotion/react": "^11.10.5",
+    "@emotion/styled": "^11.10.5",
+    "@mui/icons-material": "^5.11.0",
+    "@mui/joy": "^5.0.0-alpha.65",
+    "@mui/lab": "^5.0.0-alpha.118",
+    "@mui/material": "^5.11.7",
+    "@nestjs/core": "^9.3.3",
+    "@nestjs/platform-express": "^9.3.3",
+    "@react-oauth/google": "^0.7.0",
+    "@testing-library/jest-dom": "^5.16.5",
+    "@testing-library/react": "^13.4.0",
+    "@types/jest": "^29.4.0",
+    "@types/node": "^18.11.19",
+    "@types/react-dom": "^18.0.10",
+    "axios": "^1.3.2",
+    "bootstrap": "^5.2.3",
+    "css-loader": "^6.7.3",
+    "express": "^4.18.2",
+    "express-generator": "^4.16.1",
+    "nestjs": "^0.0.1",
+    "react-router-dom": "^6.5.0",
+    "react-scripts": "^5.0.1",
+    "react-timelines": "^2.6.1",
+    "rxjs": "^7.8.0",
+    "ts-loader": "^9.4.2",
+    "typescript": "^4.9.4",
+    "web-vitals": "^2.1.4",
+    "yarn": "^1.22.19"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build",
+    "build-yarn": "yarn --cwd build",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject",
+    "build-webpack": "cross-env TS_NODE_PROJECT=\"tsconfig-for-webpack-config.json\" webpack"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "devDependencies": {
+    "@types/react": "^18.0.27",
+    "axios": "^1.3.2",
+    "gh-pages": "^4.0.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "tsconfig-paths": "^4.1.2"
+  }
+}
